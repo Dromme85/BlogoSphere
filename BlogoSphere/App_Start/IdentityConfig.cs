@@ -51,13 +51,14 @@ namespace BlogoSphere
             };
 
             // Configure validation logic for passwords
+            // No special requirements on passwords, minimum 10 characters.
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 10,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configure user lockout defaults

@@ -49,9 +49,9 @@ namespace BlogoSphere.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [StringLength(128)]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +64,11 @@ namespace BlogoSphere.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [StringLength(128)]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
