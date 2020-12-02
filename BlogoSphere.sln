@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogoSphere", "BlogoSphere\BlogoSphere.csproj", "{9966A08C-B138-4456-81AC-EBAAC18684DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9966A08C-B138-4456-81AC-EBAAC18684DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9966A08C-B138-4456-81AC-EBAAC18684DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9966A08C-B138-4456-81AC-EBAAC18684DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9966A08C-B138-4456-81AC-EBAAC18684DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E661348-22B6-4F40-B860-473D63B376F0}
+	EndGlobalSection
+EndGlobal
