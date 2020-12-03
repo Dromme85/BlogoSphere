@@ -23,7 +23,7 @@ namespace BlogoSphere
 
             if (!roleManager.RoleExists("Admin"))
 			{
-                // No error checking made, assume everything will work anyway.
+                // No error checking made, assume everything will work anyway. TODO: Fix
                 roleManager.Create(new IdentityRole("Admin"));
                 userManager.Create(new ApplicationUser() { UserName = "Admin", Email = "admin@site.com" }, "adminpassword");
 
