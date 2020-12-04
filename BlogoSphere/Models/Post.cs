@@ -11,7 +11,7 @@ namespace BlogoSphere.Models
 		public int Id { get; set; }
 
 		[Required]
-		[StringLength(100)]
+		[StringLength(64)]
 		public string Title { get; set; }
 
 		[Required]
@@ -25,7 +25,7 @@ namespace BlogoSphere.Models
 		[Required]
 		public int Views { get; set; }
 
-		//public ICollection<Comment> Comment { get; set; }
+		public virtual ICollection<Comment> Comment { get; set; }
 
 		public virtual ICollection<Tag> Tags { get; set; }
 	}

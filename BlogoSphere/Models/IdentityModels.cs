@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -19,8 +20,8 @@ namespace BlogoSphere.Models
         [StringLength(64)]
         public string LastName { get; set; }
 
-        //public virtual ICollection<Comment> Comments { get; set; }
-        //public virtual ICollection<Blog> Blogs { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Blog> Blogs { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
