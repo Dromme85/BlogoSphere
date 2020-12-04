@@ -8,13 +8,14 @@ namespace BlogoSphere.Models
 {
     public class Comment
     {
-        [Required]
         public int Id { get; set; }
+
         [Required]
-        [StringLength(100)]
+        [StringLength(1024)]
         public string Body { get; set; }
+
         [Required]
-        [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime Created { get; set; }
     }
 }
