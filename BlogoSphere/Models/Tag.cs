@@ -11,7 +11,7 @@ namespace BlogoSphere.Models
 		public int Id { get; set; }
 
 		[Required]
-		[StringLength(100)]
+		[StringLength(64)]
 		public string Name { get; set; }
 
 
