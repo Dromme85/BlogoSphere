@@ -14,7 +14,6 @@ namespace BlogoSphere.Models
 		[StringLength(64)]
 		public string Name { get; set; }
 
-
 		public virtual ICollection<Post> Post { get; set; }
 	}
 }

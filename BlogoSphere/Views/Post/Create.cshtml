@@ -1,0 +1,94 @@
+﻿@model BlogoSphere.Models.Post
+@using BlogoSphere.Models
+
+@{
+	ViewBag.Title = "Create";
+	var popTags = (List<Tag>)ViewBag.PopularTags;
+	var tags = (List<Tag>)Session["TagsToAdd"];
+}
+
+<script>
+function addTag() {
+	$.ajax({
+		url: "/Post/AttachTag",
+		data: { name: document.getElementsByName("tagName").value },
+		success: function (data) {
+			document.getElementsByName("tagName").value = "";
+
+			$("#notags").hide();
+			$.each(data, function (idx, tag) {
+				$("#moretags").append('<div class="rounded-pill border-primary">#' + tag['Name'] + '</div>')
+			})
+
+			//$(document.body).load(location.href, function () {
+			//	// Toggle the dropdowns or they will stop working
+			//	$('.dropdown-toggle').dropdown();
+			//});
+		}
+	});
+}
+</script>
+
+<br />
+<h2 class="mt-5">Create</h2>
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<div class="container">
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			<div class="form-group row">
+				@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "col-form-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group row">
+				@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "col-form-label col-md-2" })
+				<div class="col-md-10">
+					@Html.TextAreaFor(model => model.Body, new { @class = "form-control w-75" })
+					@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<!-- Tags go here -->
+			<label>Tags</label>
+			<div class="container-fluid">
+				@if (tags.Count > 0)
+				{
+					foreach (var tag in tags)
+					{
+						<div class="rounded-pill border-primary">#@tag.Name</div>
+					}
+				}
+				else
+				{
+					<div id="notags">No tags added.</div>
+				}
+				<div id="moretags"></div>
+
+				<input type="text" name="tagName" value="" placeholder="Add tag..." class="form-control" autocomplete="off" />
+				<input type="button" value="Add" onclick="addTag()" class="btn btn-primary" />
+				
+			</div>
+
+			<div class="form-group row">
+				<div class="offset-md-2 col-md-10">
+					<input type="submit" value="Post" class="btn btn-outline-success" />
+					<a href=@Url.Action("Index", "Home") class="btn btn-outline-warning">Cancel</a>
+				</div>
+			</div>
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}
