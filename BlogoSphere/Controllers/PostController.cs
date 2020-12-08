@@ -17,6 +17,7 @@ namespace BlogoSphere.Controllers
         public ActionResult Index(int? postId)
         {
             List<Post> posts;
+
             if (postId != null)
                 posts = db.Posts.Where(p => p.Id == postId).ToList();
             else

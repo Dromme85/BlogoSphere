@@ -17,7 +17,7 @@ function addTag() {
 			$("#notags").hide();
 			$("#moretags").html(""); // Clear the div
 			$.each(data, function (idx, tag) {
-				$("#moretags").append('<div class="rounded-pill bg-primary pr-3 pl-3 pt-1 mr-3">#' + tag['Name'] + '</div>')
+				$("#moretags").append('<div class="rounded-pill bg-success pr-3 pl-3 pt-1 mr-3">#' + tag['Name'] + '</div>')
 			})
 		}
 	});
@@ -33,50 +33,61 @@ function addTag() {
 	@Html.AntiForgeryToken()
 
 	<div class="container">
-			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-			<div class="form-group row">
-				@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "col-form-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-				</div>
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group row">
+			@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "col-form-label col-md-2 text-right" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control w-50", @placeholder = "Title here ..." } })
+				@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
 			</div>
+		</div>
 
-			<div class="form-group row">
-				@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "col-form-label col-md-2" })
-				<div class="col-md-10">
-					@Html.TextAreaFor(model => model.Body, new { @class = "form-control w-75" })
-					@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
-				</div>
+		<div class="form-group row">
+			@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "col-form-label col-md-2 text-right" })
+			<div class="col-md-10">
+				@Html.TextAreaFor(model => model.Body, new { @class = "form-control w-75", @placeholder = "Write your post here ..." })
+				@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
 			</div>
+		</div>
 
-			<!-- Tags go here -->
-			<label>Tags</label>
-			<br />
-			<div class="d-inline-flex">
+		<!-- Tags go here -->
+		<br />
+		<div class="container">
+			<div class="d-inline-flex offset-2">
 				@if (tags.Count > 0)
 				{
 					foreach (var tag in tags)
 					{
-						<div class="rounded-pill bg-primary">#@tag.Name</div>
+						<div class="rounded-pill bg-success pr-3 pl-3 pt-1 mr-3">#@tag.Name</div>
 					}
 				}
 				else
 				{
-					<div id="notags">No tags added.</div>
+					<div id="notags">No tags added.&nbsp;</div>
 				}
 				<div id="moretags" class="d-inline-flex"></div>
 
 				<input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />
 				<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" />
-				
+
 			</div>
-			<div class="form-group row mt-3">
-				<div class="offset-md-2 col-md-10">
-					<input type="submit" value="Post" class="btn btn-outline-success" />
-					<a href=@Url.Action("Index", "Home") class="btn btn-outline-warning">Cancel</a>
-				</div>
+			<br />
+			<div class="d-inline-flex offset-2 mt-3">
+				@if (popTags.Count > 0)
+				{
+					foreach (var tag in popTags)
+					{
+						<div class="rounded-pill bg-primary pr-3 pl-3 pt-1 mr-3">#@tag.Name</div>
+					}
+				}
 			</div>
+		</div>
+		<div class="form-group row mt-3">
+			<div class="offset-md-2 col-md-10">
+				<input type="submit" value="Post" class="btn btn-outline-success" />
+				<a href=@Url.Action("Index", "Home") class="btn btn-outline-warning">Cancel</a>
+			</div>
+		</div>
 	</div>
 }
 
