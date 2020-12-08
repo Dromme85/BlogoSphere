@@ -11,19 +11,14 @@
 function addTag() {
 	$.ajax({
 		url: "/Post/AttachTag",
-		data: { name: document.getElementsByName("tagName").value },
+		data: { name: $("#tagName").val() },
 		success: function (data) {
-			document.getElementsByName("tagName").value = "";
-
+			$("#tagName").val("");
 			$("#notags").hide();
+			$("#moretags").html(""); // Clear the div
 			$.each(data, function (idx, tag) {
-				$("#moretags").append('<div class="rounded-pill border-primary">#' + tag['Name'] + '</div>')
+				$("#moretags").append('<div class="rounded-pill bg-primary pr-3 pl-3 pt-1 mr-3">#' + tag['Name'] + '</div>')
 			})
-
-			//$(document.body).load(location.href, function () {
-			//	// Toggle the dropdowns or they will stop working
-			//	$('.dropdown-toggle').dropdown();
-			//});
 		}
 	});
 }
@@ -57,26 +52,26 @@ function addTag() {
 
 			<!-- Tags go here -->
 			<label>Tags</label>
-			<div class="container-fluid">
+			<br />
+			<div class="d-inline-flex">
 				@if (tags.Count > 0)
 				{
 					foreach (var tag in tags)
 					{
-						<div class="rounded-pill border-primary">#@tag.Name</div>
+						<div class="rounded-pill bg-primary">#@tag.Name</div>
 					}
 				}
 				else
 				{
 					<div id="notags">No tags added.</div>
 				}
-				<div id="moretags"></div>
+				<div id="moretags" class="d-inline-flex"></div>
 
-				<input type="text" name="tagName" value="" placeholder="Add tag..." class="form-control" autocomplete="off" />
-				<input type="button" value="Add" onclick="addTag()" class="btn btn-primary" />
+				<input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />
+				<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" />
 				
 			</div>
-
-			<div class="form-group row">
+			<div class="form-group row mt-3">
 				<div class="offset-md-2 col-md-10">
 					<input type="submit" value="Post" class="btn btn-outline-success" />
 					<a href=@Url.Action("Index", "Home") class="btn btn-outline-warning">Cancel</a>

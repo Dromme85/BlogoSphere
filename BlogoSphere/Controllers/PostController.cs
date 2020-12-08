@@ -35,7 +35,7 @@ namespace BlogoSphere.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Title,Body,Tags")] Post model) // Add image here later.
+        public ActionResult Create([Bind(Include = "ID,Title,Body")] Post model) // Add image here later.
 		{
             if (ModelState.IsValid)
 			{
@@ -43,13 +43,19 @@ namespace BlogoSphere.Controllers
                 model.Views = 0;
                 model.Comment = new List<Comment>();
 
-                if (model.Tags == null) model.Tags = new List<Tag>();
+                var tta = (List<Tag>)Session["TagsToAdd"];
 
                 db.Posts.Add(model);
                 db.SaveChanges();
 
+                int pId = db.Posts.OrderByDescending(m => m.Id).First().Id;
+				foreach (var tag in tta)
+				{
+                    AddTags(pId, tag.Name);
+				}
+
                 // TODO: Should take you directly to the new post
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", new { postid = pId });
             }
 
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
@@ -110,6 +116,7 @@ namespace BlogoSphere.Controllers
             if (!db.Tags.Any(t => t.Name == name))
 			{
                 Tag tag = new Tag() { Name = name };
+                tag.Post = new List<Post>();
                 tag.Post.Add(post);
 
                 db.Tags.Add(tag);

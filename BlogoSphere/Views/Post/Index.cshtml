@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BlogoSphere.Models.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<h2 class="mt-5">Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Body)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Views)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+			<a href=@Url.Action("Index", new { postid = item.Id } ) >@Html.DisplayFor(modelItem => item.Title)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Body)
+        </td>
+        <td>
+            @item.Created.ToString("dd MMMM yyyy, HH:mm")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Views)
+        </td>
+    </tr>
+}
+
+</table>
