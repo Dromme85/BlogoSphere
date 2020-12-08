@@ -7,20 +7,18 @@ using BlogoSphere.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-
 namespace BlogoSphere.Controllers
 {
 
     public class CommentController : Controller
     {
-        private ApplicationDbContext context = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Viewcomment()
         {
-            var commentList=
-            return View();
+                return View();
         }
-        public ActionResult CreatCommentList() => RedirectToAction("Viewcomment", "Comments");
-        public ActionResult CreatComment()
+        public ActionResult CreateCommentList() => RedirectToAction("Viewcomment", "Comments");
+        public ActionResult CreateComment()
         {
             return View();
            
