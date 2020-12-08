@@ -9,19 +9,38 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogoSphere.Controllers
 {
-
     public class CommentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Viewcomment()
+
+        public ActionResult _View()
         {
-                return View();
+                return View(db.Comments.ToList());
         }
-        public ActionResult CreateCommentList() => RedirectToAction("Viewcomment", "Comments");
-        public ActionResult CreateComment()
+        public ActionResult CreateCommentList() => RedirectToAction("_View", "Comments");
+
+        public ActionResult _Create()
         {
-            return View();
-           
+            return View();           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Comments.Add(comment);
+                comment.Created = DateTime.Now;
+
+
+                db.SaveChanges();
+                ViewBag.message = "Comment added Successfully..!";
+
+                return RedirectToAction("Index");
+            }
+
+            return View(_View());
         }
     }
 }
