@@ -26,5 +26,7 @@ namespace BlogoSphere.Controllers
 
 			return View();
 		}
+
+		
 	}
 }
