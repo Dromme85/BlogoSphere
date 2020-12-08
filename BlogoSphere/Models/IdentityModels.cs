@@ -48,7 +48,5 @@ namespace BlogoSphere.Models
         {
             return new ApplicationDbContext();
         }
-
-        public System.Data.Entity.DbSet<BlogoSphere.Models.Blog> Blogs { get; set; }
     }
 }
