@@ -9,17 +9,19 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogoSphere.Controllers
 {
+    [Authorize]
     public class CommentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult _View()
+        [AllowAnonymous]
+        public ActionResult Display()
         {
-                return View(db.Comments.ToList());
+            var Comments = db.Comments.ToList().Take(5);
+            return View(Comments);
         }
-        public ActionResult CreateCommentList() => RedirectToAction("_View", "Comments");
-
-        public ActionResult _Create()
+        
+        public ActionResult Create()
         {
             return View();           
         }
@@ -33,14 +35,13 @@ namespace BlogoSphere.Controllers
                 db.Comments.Add(comment);
                 comment.Created = DateTime.Now;
 
-
                 db.SaveChanges();
                 ViewBag.message = "Comment added Successfully..!";
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Create");
             }
 
-            return View(_View());
+            return View();
         }
     }
 }
