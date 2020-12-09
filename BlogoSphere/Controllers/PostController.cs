@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace BlogoSphere.Controllers
 {
@@ -14,6 +15,8 @@ namespace BlogoSphere.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: Post
+
+        [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
             List<Post> posts;
@@ -26,8 +29,22 @@ namespace BlogoSphere.Controllers
             return View(posts);
         }
 
+        public ActionResult List(int? blogId)
+		{
+            if (blogId == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var model = db.Blogs.Include(b => b.Post).Where(b => b.Id == blogId).Select(p => p.Post).ToList();
+
+            if (model.Count == 0 || model == null)
+                return RedirectToAction("Index", "Home");
+
+            return View(model.First());
+		}
+
         public ActionResult Create()
 		{
+            // TODO: Make PopularTags work.
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
             Session["TagsToAdd"] = new List<Tag>();
 
@@ -55,6 +72,8 @@ namespace BlogoSphere.Controllers
                     AddTags(pId, tag.Name);
 				}
 
+                // TODO: Add post id to current blog, somehow
+
                 // TODO: Should take you directly to the new post
                 return RedirectToAction("Index", new { postid = pId });
             }
@@ -69,19 +88,19 @@ namespace BlogoSphere.Controllers
             if (postId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Post model = db.Posts.Find(postId);
+            Post model = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
             if (model == null)
                 return HttpNotFound();
 
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
-            Session["TagsToAdd"] = new List<Tag>();
+            Session["TagsToAdd"] = model.Tags.ToList();
 
             return View(model);
 		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Title,Body")] Post model)
+        public ActionResult Edit([Bind(Include = "ID,Title,Body,Created,Comment,Tags,Views")] Post model)
 		{
             if (ModelState.IsValid)
 			{
@@ -99,9 +118,11 @@ namespace BlogoSphere.Controllers
 
         public JsonResult AttachTag(string name)
 		{
+            // TODO: Check if any illegal characters are in the name. If so, don't add the tag.
+            // (only alphabetic and numeric characters should be allowed)
             var tta = (List<Tag>)Session["TagsToAdd"];
 
-            if (!tta.Any(t => t.Name == name))
+            if (!tta.Any(t => t.Name == name) && name.Count() > 2)
 			{
                 tta.Add(new Tag() { Name = name });
                 Session["TagsToAdd"] = tta;
