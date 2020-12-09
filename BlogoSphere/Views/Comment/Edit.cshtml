@@ -1,5 +1,11 @@
 ﻿@model BlogoSphere.Models.Comment
 
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
 
 @using (Html.BeginForm())
 {
@@ -10,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        <input type="hidden" name="PreviousUrl" value="@ViewBag.PreviousURL" />
 
         <div class="form-group">
             @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -36,7 +43,7 @@
 }
 
 <div>
-    @Html.ActionLink("Done Editing", "Display")
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {

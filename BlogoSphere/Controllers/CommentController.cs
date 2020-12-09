@@ -20,6 +20,7 @@ namespace BlogoSphere.Controllers
         public ActionResult Display()
         {
             var Comments = db.Comments.Take(5).ToList();
+
             return View(Comments);
         }
         
@@ -45,6 +46,7 @@ namespace BlogoSphere.Controllers
         // GET: Comments/Edit/5
         public ActionResult Edit(int? id)
         {
+            ViewBag.PreviousURL = Request.UrlReferrer;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -54,7 +56,7 @@ namespace BlogoSphere.Controllers
             {
                 return HttpNotFound();
             }
-            return View();
+            return View(comment);
         }
 
         // POST: Comments/Edit/5
@@ -62,20 +64,22 @@ namespace BlogoSphere.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Body")] Comment comment)
-        {
+        public ActionResult Edit([Bind(Include = "Id,Body")] Comment comment, Uri previousUrl)
+        {           
             if (ModelState.IsValid)
             {
                 db.Entry(comment).State = EntityState.Modified;
                 comment.Created = DateTime.Now;
                 db.SaveChanges();                
             }
-            return View();
+            return Redirect(previousUrl.ToString());
+            //return View();
         }
 
         // GET: Comments/Delete/5
         public ActionResult Delete(int? id)
         {
+            ViewBag.PreviousURL = Request.UrlReferrer;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -91,12 +95,13 @@ namespace BlogoSphere.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
+        public ActionResult DeleteConfirmed(int id, Uri previousUrl)
+        {       
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return View();
+            return Redirect(previousUrl.ToString());
+            //return View();
         }
     }
 }
