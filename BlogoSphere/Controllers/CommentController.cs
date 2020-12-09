@@ -17,7 +17,7 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Display()
         {
-            var Comments = db.Comments.ToList().Take(5);
+            var Comments = db.Comments.Take(5).ToList();
             return View(Comments);
         }
         
@@ -36,11 +36,8 @@ namespace BlogoSphere.Controllers
                 comment.Created = DateTime.Now;
 
                 db.SaveChanges();
-                ViewBag.message = "Comment added Successfully..!";
-
-                return RedirectToAction("Create");
+                ViewBag.message = "Comment added Successfully..!";                              
             }
-
             return View();
         }
     }
