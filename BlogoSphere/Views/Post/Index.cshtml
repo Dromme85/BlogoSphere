@@ -1,46 +1,31 @@
-﻿@model IEnumerable<BlogoSphere.Models.Post>
+﻿@model BlogoSphere.Models.Post
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
 }
 
-<br />
-<h2 class="mt-5">Index</h2>
+<div class="container mt-5">
+	<div class="">
+		<div class="h1 offset-md-2 mb-3">
+			@Html.DisplayFor(modelItem => Model.Title)
+		</div>
+		<div class="d-inline-flex row w-100 bg-light p-3">
+			<div class="d-inline-flex flex-wrap col-md-7">
+				@foreach (var tag in Model.Tags)
+				{
+					<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">@tag.Name</div>
+				}
+			</div>
+			<div class="col-md-5 text-right">
+				Created @Model.Created.ToString("dd MMMM yyyy, HH:mm") | Viewed @Html.DisplayFor(modelItem => Model.Views) times
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="offset-md-2 col-md-8">
+		<p>@Html.DisplayFor(modelItem => Model.Body)</p>
+	</div>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Body)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Created)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Views)
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-			<a href=@Url.Action("Index", new { postid = item.Id } ) >@Html.DisplayFor(modelItem => item.Title)</a>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Body)
-        </td>
-        <td>
-            @item.Created.ToString("dd MMMM yyyy, HH:mm")
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Views)
-        </td>
-    </tr>
-}
-
-</table>
+<hr />
+<div class="offset-md-2 col-md-8">@Html.Action("CreateComment","Comment")</div>
