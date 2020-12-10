@@ -10,20 +10,20 @@
     <h4>Blog</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Title)
-        </dt>
+        </dt>*@
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
+        <dd >
+            <h2 style="color:coral">@Html.DisplayFor(model => model.Title)</h2>  
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Body)
-        </dt>
+        </dt>*@
 
         <dd>
-            @Html.DisplayFor(model => model.Body)
+         @Html.DisplayFor(model => model.Body)
         </dd>
 
         <dt>
