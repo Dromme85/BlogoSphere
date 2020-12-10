@@ -1,0 +1,123 @@
+﻿@model BlogoSphere.Models.Post
+@using BlogoSphere.Models
+
+@{
+	ViewBag.Title = "Edit";
+	var popTags = (List<Tag>)ViewBag.PopularTags;
+	var tags = (List<Tag>)Session["TagsToAdd"];
+}
+
+<script>
+	function addTag() {
+		$.ajax({
+			url: "/Post/AttachTag",
+			data: { name: $("#tagName").val() },
+			success: function (data) {
+				$("#tagName").val("");
+				$("#notags").hide();
+				$("#moretags").html(""); // Clear the div
+				$.each(data, function (idx, tag) {
+					$("#moretags").append('<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">' + tag['Name'] + '</div>')
+				});
+				$("#moretags").append('<div><input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />' +
+					'<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" /></div>');
+			}
+		});
+	}
+	function addPopTag(tagname, id) {
+		$.ajax({
+			url: "/Post/AttachTag",
+			data: { name: tagname },
+			success: function (data) {
+				$("#notags").hide();
+				$("#tag_" + id).hide();
+				$("#moretags").html(""); // Clear the div
+				$.each(data, function (idx, tag) {
+					$("#moretags").append('<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">' + tag['Name'] + '</div>')
+				});
+				$("#moretags").append('<div><input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />' +
+					'<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" /></div>');
+			}
+		});
+	}
+</script>
+
+<br />
+<h2 class="mt-5">Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<div class="container">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.Id)
+		@Html.HiddenFor(model => model.Views)
+		@Html.HiddenFor(model => model.Created)
+
+		<div class="form-group row">
+			@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "col-form-label col-md-2 text-md-right" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control w-50", @placeholder = "Title here ..." } })
+				@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group row">
+			@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "col-form-label col-md-2 text-md-right" })
+			<div class="col-md-10">
+				@Html.TextAreaFor(model => model.Body, new { @class = "form-control w-75", @placeholder = "Write your post here ..." })
+				@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<!-- Tags go here -->
+		<br />
+		<div class="container">
+			<div class="d-inline-flex flex-wrap offset-md-2 w-75">
+				@if (tags.Count > 0)
+				{
+					foreach (var tag in tags)
+					{
+						<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">@tag.Name</div>
+					}
+				}
+				else
+				{
+					<div id="notags">No tags added.&nbsp;</div>
+				}
+				<div id="moretags" class="d-inline-flex flex-wrap">
+					<input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />
+					<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" />
+				</div>
+
+			</div>
+			<br />
+			<div class="d-inline-flex flex-wrap offset-md-2 mt-3 w-75">
+				<div class="mr-2 pt-1">Popular Tags</div>
+				@if (popTags.Count > 0)
+				{
+					foreach (var tag in popTags)
+					{
+						<a href="javascript:;" id="tag_@tag.Id" onclick="addPopTag('@tag.Name', @tag.Id)" class="rounded-pill bg-primary pr-3 pl-3 pt-1 pb-1 mr-2 mb-2 text-light">@tag.Name</a>
+					}
+				}
+			</div>
+		</div>
+		<div class="form-group row mt-3">
+			<div class="offset-md-2 col-md-10">
+				<input type="submit" value="Post Changes" class="btn btn-outline-success" />
+				<a href=@Url.Action("Index", "Home") class="btn btn-outline-warning">Cancel</a>
+			</div>
+		</div>
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}
