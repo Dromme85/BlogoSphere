@@ -51,10 +51,8 @@ namespace BlogoSphere.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Blogs.Add(blog);
                 blog.Created = DateTime.Now;
-
-
+                db.Blogs.Add(blog);
                 db.SaveChanges();
                 ViewBag.message = "Blog Details are saved Successfully..!";
 

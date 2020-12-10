@@ -8,8 +8,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
+    <div class="form-horizontal" id="Comment">        
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <h4>Comment</h4>        
@@ -21,12 +20,13 @@
         <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-success" />
+                <input type="submit" value="Submit" onClick="" class="btn btn-success" />
                 <input type="reset" value="Clear" class="btn btn-danger" />
             </div>
         </div>
     </div>
 }
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval") 
+    @Scripts.Render("~/bundles/jqueryval")    
 }
+
