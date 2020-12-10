@@ -30,10 +30,10 @@
 					<li class="nav-item @(cont == "Home" ? "active" : "")">
 						<a>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</a>
 					</li>
-					<li class="nav-item @(cont == "Home" ? "active" : "")">
+					<li class="nav-item @(cont == "Blogs" ? "active" : "")">
 						<a>@Html.ActionLink("My Blog", "Index", "Blogs", null, new { @class = "nav-link" })</a>
 					</li>
-					<li class="nav-item @(cont == "Home" ? "active" : "")">
+					<li class="nav-item @(cont == "Post" ? "active" : "")">
 						<a>@Html.ActionLink("Create Blog", "Create", "Blogs", null, new { @class = "nav-link" })</a>
 					</li>
 				</ul>
@@ -43,7 +43,8 @@
 	</div>
 
 	<div class="container body-content">
-		<br class="mb-5"/>
+		<br />
+		<div class="mb-5"></div>
 		@RenderBody()
 		<hr />
 		<footer>
