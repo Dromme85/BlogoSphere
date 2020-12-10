@@ -19,14 +19,14 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
-            List<Post> posts;
+            if (postId == null) postId = 1;
 
-            if (postId != null)
-                posts = db.Posts.Where(p => p.Id == postId).ToList();
-            else
-                posts = db.Posts.ToList();
+            var post = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
 
-            return View(posts);
+            // TODO: make this work
+            post.Views++;
+
+            return View(post);
         }
 
         public ActionResult List(int? blogId)

@@ -72,17 +72,7 @@
 		<br />
 		<div class="container">
 			<div class="d-inline-flex offset-md-2 w-75">
-				@if (tags.Count > 0)
-				{
-					foreach (var tag in tags)
-					{
-						<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-3">@tag.Name</div>
-					}
-				}
-				else
-				{
-					<div id="notags">No tags added.&nbsp;</div>
-				}
+				<div id="notags">No tags added.&nbsp;</div>
 				<div id="moretags" class="d-inline-flex flex-wrap">
 					<input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />
 					<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" />
