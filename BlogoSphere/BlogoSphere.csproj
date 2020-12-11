@@ -353,8 +353,6 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Post\Create.cshtml" />
     <Content Include="Views\Post\Index.cshtml" />
-    <Content Include="Views\Comment\_Create.cshtml" />
-    <Content Include="Views\Comment\_View.cshtml" />
     <Content Include="Views\Blogs\Create.cshtml" />
     <Content Include="Views\Blogs\Delete.cshtml" />
     <Content Include="Views\Blogs\Details.cshtml" />
@@ -362,6 +360,10 @@
     <Content Include="Views\Blogs\Index.cshtml" />
     <Content Include="Views\Post\Edit.cshtml" />
     <Content Include="Views\Post\List.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Comment\Delete.cshtml" />
+    <Content Include="Views\Comment\Display.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
