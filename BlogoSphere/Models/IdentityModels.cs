@@ -20,7 +20,10 @@ namespace BlogoSphere.Models
         [StringLength(64)]
         public string LastName { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        [DataType(DataType.ImageUrl)]
+		public string Image { get; set; }
+
+		public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Blog> Blogs { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

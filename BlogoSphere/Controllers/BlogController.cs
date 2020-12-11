@@ -10,11 +10,13 @@ using BlogoSphere.Models;
 
 namespace BlogoSphere.Controllers
 {
-    public class BlogsController : Controller
+    [Authorize]
+    public class BlogController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Blogs
+        [AllowAnonymous]
         public ActionResult Index()
         {
         
@@ -22,6 +24,7 @@ namespace BlogoSphere.Controllers
         }
 
         // GET: Blogs/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)

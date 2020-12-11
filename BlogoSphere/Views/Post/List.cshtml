@@ -1,7 +1,12 @@
-﻿@model IEnumerable<BlogoSphere.Models.Post>
+﻿
+@model IEnumerable<BlogoSphere.Models.Post>
+
+@{
+	Layout = null;
+}
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Blogpost", "Create", new { blogid = ViewBag.BlogId })
 </p>
 <table class="table">
     <tr>

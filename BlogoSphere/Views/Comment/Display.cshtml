@@ -1,28 +1,34 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Comment>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Body)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Created)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Body)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Created)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.Id })       
-        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-    </td>
-</tr>
+@{
+	Layout = null;
 }
-</table>
+
+<div class="container">
+	@foreach (var item in Model)
+	{
+	<div class="row mb-2 shadow bg-light text-light">
+		<div class="col-9 pr-0 pl-0">
+			<div class="p-1 bg-secondary">
+				@Html.DisplayFor(modelItem => item.Created)
+			</div>
+			<div class="text-dark p-2">
+				@Html.DisplayFor(modelItem => item.Body)
+			</div>
+		</div>
+		<div class="col-3 text-right bg-secondary">
+			<div>@*Profile Image here*@</div>
+			<div class="">
+				@User.Identity.Name
+			</div>
+			<div class="">
+				<a href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-edit text-light"></i></a>
+				<a href="@Url.Action("Delete", new { id = item.Id })"><i class="fas fa-trash-alt text-light"></i></a>
+				@*@Html.ActionLink("Edit", "Edit", new { id = item.Id })
+				@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+			</div>
+		</div>
+		<br />
+	</div>
+	}
+</div>
