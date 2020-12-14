@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using BlogoSphere.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity.Migrations;
 
 namespace BlogoSphere.Controllers
 {
@@ -15,18 +16,18 @@ namespace BlogoSphere.Controllers
     public class CommentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+       
         [AllowAnonymous]
-        public ActionResult Display(int? postId)
+        public ActionResult Display(int? postId, string ApplicationUser_Id)
         {
             if (postId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             //var Comments = db.Comments.OrderByDescending(c => c.Created).ToList();
             var Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
-            //Comments = (List<Comment>)(from c in Comments
-            //                            orderby c.Id descending
-            //                            select c);
+            //ViewBag.user = db.Comments.Include(ApplicationUser_Id).FirstOrDefault();
+            //var users = db.Users.Include(u => u.Comments).ToList();
+
             return View(Comments.Take(5));
         }
         

@@ -18,9 +18,11 @@
 		</div>
 		<div class="col-3 text-right bg-secondary">
 			<div>@*Profile Image here*@</div>
-			<div class="">
-				@User.Identity.Name
-			</div>
+            <div class="">
+                @*@User.Identity.Name*@
+                @*@ViewBag.user;*@
+				
+            </div>
 			<div class="">
 				<a href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-edit text-light"></i></a>
 				<a href="@Url.Action("Delete", new { id = item.Id })"><i class="fas fa-trash-alt text-light"></i></a>
