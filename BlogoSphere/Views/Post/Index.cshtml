@@ -17,7 +17,7 @@
 				}
 			</div>
 			<div class="col-md-5 text-right">
-				Created @Model.Created.ToString("dd MMMM yyyy, HH:mm") | Viewed @Html.DisplayFor(modelItem => Model.Views) times
+				Created @Model.Created.ToString("dd MMMM yyyy, HH:mm") | Viewed @Session[Model.Id + "views"] times
 			</div>
 		</div>
 	</div>
@@ -30,3 +30,7 @@
 <hr />
 <div class="offset-md-2 col-md-8 mt-5">@Html.Action("Display", "Comment", new { postid = Model.Id })</div>
 <div class="offset-md-2 col-md-8">@Html.Action("Create", "Comment", new { postid = Model.Id })</div>
+<div>
+	@Html.ActionLink("Back to Blog Details", "Details", "Blog", new { id = (int)ViewBag.CurrentBlogId }, new { @class = "btn btn-primary" })
+	@Html.ActionLink("Edit this Post", "Edit", "Post", new { postid = Model.Id }, new { @class = "btn btn-warning" })
+</div>

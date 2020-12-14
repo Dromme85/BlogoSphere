@@ -7,7 +7,7 @@
 	var tags = (List<Tag>)Session["TagsToAdd"];
 }
 
-<script>
+<script> // TODO: Move this script to script file.
 	function addTag() {
 		$.ajax({
 			url: "/Post/AttachTag",
@@ -24,6 +24,7 @@
 			}
 		});
 	}
+	// TODO: Is it possible to merge addTag and addPopTag?
 	function addPopTag(tagname, id) {
 		$.ajax({
 			url: "/Post/AttachTag",
@@ -72,7 +73,6 @@
 			</div>
 		</div>
 
-		<!-- Tags go here -->
 		<br />
 		<div class="container">
 			<div class="d-inline-flex flex-wrap offset-md-2 w-75">

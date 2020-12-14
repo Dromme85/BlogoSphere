@@ -7,7 +7,7 @@
 	var tags = (List<Tag>)Session["TagsToAdd"];
 }
 
-<script>
+<script> // TODO: Move this script to script file.
 	function addTag() {
 		$.ajax({
 			url: "/Post/AttachTag",

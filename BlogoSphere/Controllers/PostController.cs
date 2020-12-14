@@ -15,16 +15,25 @@ namespace BlogoSphere.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: Post
+        static int pv = 0;
 
         [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
-            if (postId == null) postId = 1; // TODO: Redirect to blog details instead
+            if (postId == null) return RedirectToAction("Index", "Blog" );
 
+            ViewBag.CurrentBlogId = GetCurrentBlogId((int)postId);
             var post = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
 
-            // TODO: make this work
-            //post.Views++;
+            if (Session[post.Id + "views"] == null)
+                pv = post.Views + 1;
+			else
+                pv = (int)Session[post.Id + "views"] + 1;
+            Session[post.Id + "views"] = pv;
+
+            post.Views = (int)Session[post.Id + "views"];
+            db.Entry(post).State = EntityState.Modified;
+            db.SaveChanges();
 
             return View(post);
         }
@@ -78,7 +87,6 @@ namespace BlogoSphere.Controllers
                     AddTags(pId, tag.Name);
 				}
 
-                // TODO: Add post id to current blog, somehow
                 var user = db.Users.Find(User.Identity.GetUserId());
                 var blogid = (int)Session["BlogId"];
                 var blog = db.Blogs.Find(blogid);
@@ -88,7 +96,6 @@ namespace BlogoSphere.Controllers
                 blog.Posts.Add(db.Posts.Find(pId));
                 db.SaveChanges();
 
-                // TODO: Should take you directly to the new post
                 return RedirectToAction("Index", new { postid = pId });
             }
 
@@ -121,8 +128,7 @@ namespace BlogoSphere.Controllers
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
 
-                // TODO: Should redirect to the edited post
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", new { postid = model.Id });
 			}
 
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
@@ -132,8 +138,6 @@ namespace BlogoSphere.Controllers
 
         public JsonResult AttachTag(string name)
 		{
-            // TODO: Check if any illegal characters are in the name. If so, don't add the tag.
-            // (only alphabetic and numeric characters should be allowed)
             var tta = (List<Tag>)Session["TagsToAdd"];
 
             if (!tta.Any(t => t.Name == name) && name.Count() > 2)
@@ -178,6 +182,11 @@ namespace BlogoSphere.Controllers
                 db.SaveChanges();
             }
             else ViewBag.TagError = "No tag by that name. Cannot remove.";
+		}
+
+        private int GetCurrentBlogId(int? postId)
+		{
+            return db.Blogs.Include(b => b.Posts).Where(b => b.Posts.Any(p => p.Id == postId)).First().Id;
 		}
     }
 }
