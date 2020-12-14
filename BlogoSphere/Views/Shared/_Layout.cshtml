@@ -30,11 +30,11 @@
 					<li class="nav-item @(cont == "Home" ? "active" : "")">
 						<a>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</a>
 					</li>
-					<li class="nav-item @(cont == "Blogs" ? "active" : "")">
-						<a>@Html.ActionLink("My Blog", "Index", "Blogs", null, new { @class = "nav-link" })</a>
+					<li class="nav-item @(cont == "Blog" ? "active" : "")">
+						<a>@Html.ActionLink("My Blog", "Index", "Blog", null, new { @class = "nav-link" })</a>
 					</li>
 					<li class="nav-item @(cont == "Post" ? "active" : "")">
-						<a>@Html.ActionLink("Create Blog", "Create", "Blogs", null, new { @class = "nav-link" })</a>
+						<a>@Html.ActionLink("Create Blog", "Create", "Blog", null, new { @class = "nav-link" })</a>
 					</li>
 				</ul>
 				@Html.Partial("_LoginPartial")

@@ -15,7 +15,7 @@ namespace BlogoSphere.Models
         public string Body { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0: d MMMM yyyy, HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime Created { get; set; }
     }
 }

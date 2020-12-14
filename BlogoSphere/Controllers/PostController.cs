@@ -19,12 +19,12 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
-            if (postId == null) postId = 1;
+            if (postId == null) postId = 1; // TODO: Redirect to blog details instead
 
             var post = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
 
             // TODO: make this work
-            post.Views++;
+            //post.Views++;
 
             return View(post);
         }
@@ -34,7 +34,9 @@ namespace BlogoSphere.Controllers
             if (blogId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var model = db.Blogs.Include(b => b.Post).Where(b => b.Id == blogId).Select(p => p.Post).ToList();
+            ViewBag.BlogId = blogId;
+
+            var model = db.Blogs.Include(b => b.Posts).Where(b => b.Id == blogId).Select(p => p.Posts).ToList();
 
             if (model.Count == 0 || model == null)
                 return RedirectToAction("Index", "Home");
@@ -42,8 +44,12 @@ namespace BlogoSphere.Controllers
             return View(model.First());
 		}
 
-        public ActionResult Create()
+        public ActionResult Create(int? blogId)
 		{
+            if (blogId == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            Session["BlogId"] = blogId;
+
             // TODO: Make PopularTags work.
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
             Session["TagsToAdd"] = new List<Tag>();
@@ -59,7 +65,7 @@ namespace BlogoSphere.Controllers
 			{
                 model.Created = DateTime.Now;
                 model.Views = 0;
-                model.Comment = new List<Comment>();
+                model.Comments = new List<Comment>();
 
                 var tta = (List<Tag>)Session["TagsToAdd"];
 
@@ -73,6 +79,14 @@ namespace BlogoSphere.Controllers
 				}
 
                 // TODO: Add post id to current blog, somehow
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var blogid = (int)Session["BlogId"];
+                var blog = db.Blogs.Find(blogid);
+                if (blog == null)
+                    return HttpNotFound();
+
+                blog.Posts.Add(db.Posts.Find(pId));
+                db.SaveChanges();
 
                 // TODO: Should take you directly to the new post
                 return RedirectToAction("Index", new { postid = pId });
@@ -138,15 +152,15 @@ namespace BlogoSphere.Controllers
             if (!db.Tags.Any(t => t.Name == name))
 			{
                 Tag tag = new Tag() { Name = name };
-                tag.Post = new List<Post>();
-                tag.Post.Add(post);
+                tag.Posts = new List<Post>();
+                tag.Posts.Add(post);
 
                 db.Tags.Add(tag);
 			}
             else
 			{
                 var tag = db.Tags.Where(t => t.Name == name).First();
-                tag.Post.Add(post);
+                tag.Posts.Add(post);
 			}
 
             db.SaveChanges();

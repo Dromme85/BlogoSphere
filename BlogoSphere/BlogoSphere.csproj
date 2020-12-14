@@ -172,7 +172,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
-    <Compile Include="Controllers\BlogsController.cs" />
+    <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PostController.cs" />
@@ -224,7 +224,6 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include=".gitconfig" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -353,11 +352,11 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Post\Create.cshtml" />
     <Content Include="Views\Post\Index.cshtml" />
-    <Content Include="Views\Blogs\Create.cshtml" />
-    <Content Include="Views\Blogs\Delete.cshtml" />
-    <Content Include="Views\Blogs\Details.cshtml" />
-    <Content Include="Views\Blogs\Edit.cshtml" />
-    <Content Include="Views\Blogs\Index.cshtml" />
+    <Content Include="Views\Blog\Create.cshtml" />
+    <Content Include="Views\Blog\Delete.cshtml" />
+    <Content Include="Views\Blog\Details.cshtml" />
+    <Content Include="Views\Blog\Edit.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Post\Edit.cshtml" />
     <Content Include="Views\Post\List.cshtml" />
     <Content Include="Views\Comment\Create.cshtml" />

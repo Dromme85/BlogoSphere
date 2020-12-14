@@ -17,15 +17,26 @@ namespace BlogoSphere.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [AllowAnonymous]
-        public ActionResult Display()
+        public ActionResult Display(int? postId)
         {
-            var Comments = db.Comments.Take(5).ToList();
+            if (postId == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            return View(Comments);
+            //var Comments = db.Comments.OrderByDescending(c => c.Created).ToList();
+            var Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
+            //Comments = (List<Comment>)(from c in Comments
+            //                            orderby c.Id descending
+            //                            select c);
+            return View(Comments.Take(5));
         }
         
-        public ActionResult Create()
+        public ActionResult Create(int? postId)
         {
+            if (postId == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Session["PostId"] = postId;
+
             return View();           
         }
 
@@ -37,6 +48,9 @@ namespace BlogoSphere.Controllers
             {
                 db.Comments.Add(comment);
                 comment.Created = DateTime.Now;
+
+                db.Posts.Find((int)Session["PostId"]).Comments.Add(comment);
+                db.Users.Find(User.Identity.GetUserId()).Comments.Add(comment);
 
                 db.SaveChanges();
                 ViewBag.message = "Comment added Successfully..!";                              
