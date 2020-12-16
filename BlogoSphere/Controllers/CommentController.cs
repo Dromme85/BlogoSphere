@@ -29,7 +29,8 @@ namespace BlogoSphere.Controllers
             //                            select c);
             return View(Comments.Take(5));
         }
-        
+
+        [AllowAnonymous]
         public ActionResult Create(int? postId)
         {
             if (postId == null)

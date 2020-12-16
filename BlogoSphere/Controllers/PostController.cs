@@ -22,8 +22,16 @@ namespace BlogoSphere.Controllers
         {
             if (postId == null) return RedirectToAction("Index", "Blog" );
 
-            ViewBag.CurrentBlogId = GetCurrentBlogId((int)postId);
+            var blogId = GetCurrentBlogId((int)postId);
             var post = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
+
+            // Get UserName for current blog and compare it to the current logged in users name
+            bool isOwner = false;
+            var uname = db.Users.Where(u => u.Blogs.Any(b => b.Id == blogId)).FirstOrDefault().UserName;
+            if (uname == User.Identity.Name) isOwner = true;
+
+            ViewBag.CurrentBlogId = blogId;
+            ViewBag.IsOwner = isOwner;
 
             if (Session[post.Id + "views"] == null)
                 pv = post.Views + 1;
@@ -38,6 +46,7 @@ namespace BlogoSphere.Controllers
             return View(post);
         }
 
+        [AllowAnonymous]
         public ActionResult List(int? blogId)
 		{
             if (blogId == null)
@@ -84,8 +93,9 @@ namespace BlogoSphere.Controllers
                 int pId = db.Posts.OrderByDescending(m => m.Id).First().Id;
 				foreach (var tag in tta)
 				{
-                    AddTags(pId, tag.Name);
-				}
+					AddTags(pId, tag.Name);
+                }
+                //AddTags(model, tta);
 
                 var user = db.Users.Find(User.Identity.GetUserId());
                 var blogid = (int)Session["BlogId"];
@@ -114,17 +124,51 @@ namespace BlogoSphere.Controllers
                 return HttpNotFound();
 
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
-            Session["TagsToAdd"] = model.Tags.ToList();
+
+            //Session["TagsToAdd"] = new List<Tag>();
+            //Session["TagsToAdd"] = model.Tags.ToList();
+
+   //         foreach (var item in model.Tags)
+			//{
+   //             AttachTag(item.Name);
+			//}
+            //Session["TagsToAdd"] = model.Tags.ToList();
+            //Session["TagsToAdd"] = new List<Tag>();
 
             return View(model);
 		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Title,Body,Created,Comment,Tags,Views")] Post model)
+        public ActionResult Edit([Bind(Include = "Id,Title,Body")] Post model)
 		{
             if (ModelState.IsValid)
-			{
+            {
+                //db.Entry(model).State = EntityState.Modified;
+                //db.SaveChanges();
+
+                //db.Posts.Find(model.Id).Tags.Clear();
+                //db.SaveChanges();
+
+                //var tta = (List<Tag>)Session["TagsToAdd"];
+                //var tts = (List<Tag>)Session["TagsToSub"];
+
+                //var p = db.Posts.Find(model.Id);
+                //p.Title = model.Title;
+                //p.Body = model.Body;
+                
+
+                //foreach (var item in tta)
+                //{
+                //    AddTags(model.Id, item.Name);
+                //}
+                //model.Tags = tta;
+
+				//foreach (var item in tts)
+    //            {
+    //                DeleteTag(model.Id, item.Name);
+    //            }
+
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -140,49 +184,95 @@ namespace BlogoSphere.Controllers
 		{
             var tta = (List<Tag>)Session["TagsToAdd"];
 
-            if (!tta.Any(t => t.Name == name) && name.Count() > 2)
+            if (!tta.Any(t => t.Name == name) && name.Length > 2)
 			{
-                tta.Add(new Tag() { Name = name });
+                tta.Add(new Tag() { Name = name }); //, Id = tta.Count + 1 });
                 Session["TagsToAdd"] = tta;
 			}
 
             return Json(tta, JsonRequestBehavior.AllowGet);
 		}
 
-        public void AddTags(int postId, string name)
+        public JsonResult DetachTag(string name)
+        {
+            var tta = (List<Tag>)Session["TagsToAdd"];
+
+            if (tta.Any(t => t.Name == name))
+            {
+                tta.Remove(tta.First(t => t.Name == name));
+                Session["TagsToAdd"] = tta;
+            }
+            else
+                ViewBag.TagError = "No tag by that name. Cannot remove.";
+
+            return Json(tta, JsonRequestBehavior.AllowGet);
+		}
+
+        public void AddTags(Post post, List<Tag> tags)
 		{
+            //Post post = db.Posts.Find(postId);
+            //db.Posts.Find(postId).Tags.Clear();
+            post.Tags = new List<Tag>();
+			foreach (var item in tags)
+			{
+                if (!db.Tags.Any(t => t.Name == item.Name))
+			    {
+                    //Tag tag = new Tag() { Name = item.Name };
+                    //tag.Posts = new List<Post>();
+                    //tag.Posts.Add(post);
+                    //post.Tags.Add(item);
+
+                    db.Tags.Add(item);
+			    }
+                else
+			    {
+                    //var tag = db.Tags.Where(t => t.Name == item.Name).First();
+                    //tag.Posts.Add(post);
+			    }
+
+                post.Tags.Add(item);
+                //db.SaveChanges();
+            }
+
+        }
+        public void AddTags(int postId, string name)
+        {
             Post post = db.Posts.Find(postId);
 
             if (!db.Tags.Any(t => t.Name == name))
-			{
+            {
                 Tag tag = new Tag() { Name = name };
                 tag.Posts = new List<Post>();
                 tag.Posts.Add(post);
 
                 db.Tags.Add(tag);
-			}
+            }
             else
-			{
+            {
                 var tag = db.Tags.Where(t => t.Name == name).First();
                 tag.Posts.Add(post);
-			}
+            }
 
             db.SaveChanges();
-		}
+        }
 
-        public void DetachTag(int postId, string name)
+
+        public void DeleteTag(int postId, string name)
         {
             Post post = db.Posts.Find(postId);
 
-            if (post.Tags.Any(t => t.Name == name))
-            {
-                post.Tags.Remove(post.Tags.First(t => t.Name == name));
+            //if (post.Tags.Any(t => t.Name == name))
+            //{
+            //    post.Tags.Remove(post.Tags.First(t => t.Name == name));
+            //    var tag = db.Tags.Where(t => t.Name == name).First();
+            //    tag.Posts.Remove(post);
 
-                db.Entry(post).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-            else ViewBag.TagError = "No tag by that name. Cannot remove.";
-		}
+            //    db.Entry(post).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //}
+            //else
+                ViewBag.TagError = "No tag by that name. Cannot remove.";
+        }
 
         private int GetCurrentBlogId(int? postId)
 		{

@@ -23,7 +23,7 @@
 	</div>
 	<hr />
 	<div class="offset-md-2 col-md-8">
-		<p>@Html.DisplayFor(modelItem => Model.Body)</p>
+		<p disabled>@Html.DisplayFor(modelItem => Model.Body)</p>
 	</div>
 </div>
 
@@ -32,5 +32,6 @@
 <div class="offset-md-2 col-md-8">@Html.Action("Create", "Comment", new { postid = Model.Id })</div>
 <div>
 	@Html.ActionLink("Back to Blog Details", "Details", "Blog", new { id = (int)ViewBag.CurrentBlogId }, new { @class = "btn btn-primary" })
-	@Html.ActionLink("Edit this Post", "Edit", "Post", new { postid = Model.Id }, new { @class = "btn btn-warning" })
+	@if (User.Identity.IsAuthenticated && (bool)ViewBag.IsOwner) // TODO: Change this to check if post owner.
+		{ @Html.ActionLink("Edit this Post", "Edit", "Post", new { postid = Model.Id }, new { @class = "btn btn-warning" }) }
 </div>
