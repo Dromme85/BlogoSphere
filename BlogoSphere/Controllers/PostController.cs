@@ -125,52 +125,52 @@ namespace BlogoSphere.Controllers
 
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
 
-            //Session["TagsToAdd"] = new List<Tag>();
-            //Session["TagsToAdd"] = model.Tags.ToList();
+            Session["TagsToAdd"] = new List<Tag>();
+			//Session["TagsToAdd"] = model.Tags.ToList();
 
-   //         foreach (var item in model.Tags)
-			//{
-   //             AttachTag(item.Name);
-			//}
-            //Session["TagsToAdd"] = model.Tags.ToList();
-            //Session["TagsToAdd"] = new List<Tag>();
+			foreach (var item in model.Tags)
+			{
+				AttachTag(item.Name);
+			}
+			//Session["TagsToAdd"] = model.Tags.ToList();
+			//Session["TagsToAdd"] = new List<Tag>();
 
-            return View(model);
+			return View(model);
 		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Body")] Post model)
+        public ActionResult Edit([Bind(Include = "Id,Title,Body,Created,Views,Image")] Post model)
 		{
             if (ModelState.IsValid)
             {
-                //db.Entry(model).State = EntityState.Modified;
-                //db.SaveChanges();
+				db.Entry(model).State = EntityState.Modified;
+				db.SaveChanges();
 
-                //db.Posts.Find(model.Id).Tags.Clear();
-                //db.SaveChanges();
+				//db.Posts.Find(model.Id).Tags.Clear();
+				//db.SaveChanges();
 
-                //var tta = (List<Tag>)Session["TagsToAdd"];
-                //var tts = (List<Tag>)Session["TagsToSub"];
+				var tta = (List<Tag>)Session["TagsToAdd"];
+				//var tts = (List<Tag>)Session["TagsToSub"];
 
-                //var p = db.Posts.Find(model.Id);
-                //p.Title = model.Title;
-                //p.Body = model.Body;
-                
+				//var p = db.Posts.Find(model.Id);
+				//p.Title = model.Title;
+				//p.Body = model.Body;
 
-                //foreach (var item in tta)
-                //{
-                //    AddTags(model.Id, item.Name);
-                //}
-                //model.Tags = tta;
+
+				foreach (var item in tta)
+				{
+					AddTags(model.Id, item.Name);
+				}
+				//model.Tags = tta;
 
 				//foreach (var item in tts)
     //            {
     //                DeleteTag(model.Id, item.Name);
     //            }
 
-                db.Entry(model).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(model).State = EntityState.Modified;
+                //db.SaveChanges();
 
                 return RedirectToAction("Index", new { postid = model.Id });
 			}
@@ -183,12 +183,11 @@ namespace BlogoSphere.Controllers
         public JsonResult AttachTag(string name)
 		{
             var tta = (List<Tag>)Session["TagsToAdd"];
-
             if (!tta.Any(t => t.Name == name) && name.Length > 2)
-			{
+            {
                 tta.Add(new Tag() { Name = name }); //, Id = tta.Count + 1 });
                 Session["TagsToAdd"] = tta;
-			}
+            }
 
             return Json(tta, JsonRequestBehavior.AllowGet);
 		}
