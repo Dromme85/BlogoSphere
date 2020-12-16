@@ -66,6 +66,26 @@ namespace BlogoSphere.Controllers
         }
 
         // GET: Blogs/Edit/5
+        //public ActionResult DisplayBlogFor(string CheckoutAddressBox)
+        //{
+
+        //    //var displayBlog = db.Blogs.Where(b => b.Title.Contains(CheckoutAddressBox)).ToList();
+        //    //if (displayBlog == null)
+        //    //    return RedirectToAction("Index", "Home");
+
+        //    return View(db.Blogs.Where(b => b.Title.Contains(CheckoutAddressBox))  CheckoutAddressBox ==null).ToList());
+        //}
+        public ActionResult DisplayBlogPostFor(string CheckoutAddressBox)
+        {
+            BlogPostVM obj = new BlogPostVM();
+             if (CheckoutAddressBox != null)
+            {
+                obj.BlogList = db.Blogs.Where(b =>  b.Title.Contains(CheckoutAddressBox)).ToList();
+                obj.PostList = db.Posts.Where(p =>  p.Title.Contains(CheckoutAddressBox)).ToList();
+                obj.searching = CheckoutAddressBox;
+            }
+               return View(obj);
+        }
         public ActionResult Edit(int? id)
         {
             if (id == null)

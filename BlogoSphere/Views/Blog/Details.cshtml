@@ -5,26 +5,15 @@
 }
 
 <div>
-	<dl class="dl-horizontal">
-		@*<dt>
-				@Html.DisplayNameFor(model => model.Title)
-			</dt>*@
-
+	<dl class="alert-info">
+		
 		<dd>
 			<h2 style="color:coral">@Html.DisplayFor(model => model.Title)</h2>
 		</dd>
 
-		@*<dt>
-				@Html.DisplayNameFor(model => model.Body)
-			</dt>*@
-
-		<dd>
+		<dd >
 			@Html.DisplayFor(model => model.Body)
 		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.Created)
-		</dt>
 
 		<dd>
 			@Html.DisplayFor(model => model.Created)
@@ -32,10 +21,10 @@
 
 	</dl>
 </div>
-<p>
+@*<p>
 	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
 	@Html.ActionLink("Back to List", "Index")
-</p>
-<hr />
-<div class="">@Html.Action("List", "Post", new { blogid = Model.Id })</div>
+</p>*@
+@*<hr />*@
+@*<div class="">@Html.Action("List", "Post", new { blogid = Model.Id })</div>*@
 
