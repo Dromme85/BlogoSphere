@@ -24,9 +24,9 @@ namespace BlogoSphere.Controllers
             if (postId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);            
             
-            var comments = db.Comments.Include(c => c.Post).Include(c => c.User).OrderByDescending(c => c.Created).ToList();
-
-            return View(comments.Take(5));
+            var Comments = db.Comments.Include(c => c.Post).Include(c => c.User).ToList();
+            Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
+            return View(Comments.Take(5));
         }
         
         public ActionResult Create(int? postId)
