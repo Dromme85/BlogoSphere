@@ -8,40 +8,25 @@
 <h2 style="color:coral">Blog  Page</h2>
 
 
-@*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
 <table class="table">
-    @*<tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Body)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th></th>
-        </tr>*@
-
+    
     @foreach (var item in Model)
     {
         <tr>
             <td width="15%">
-                @*@Html.(modelItem => item.Title)*@
-
-                @Html.DisplayFor(modelItem => item.Title)
+                <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+                   
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
             </td>
             <td width="40%">
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
+                 @Html.DisplayFor(modelItem => item.Body)
+             </td>
             <td width="15%">
                 @Html.DisplayFor(modelItem => item.Created)
-            </td>
+               </td>
             <td width="30%">
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "fa fa-edit" })
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
                 @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "fa fa-align-justify" })
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "fa fa-trash" })
             </td>

@@ -28,7 +28,8 @@ namespace BlogoSphere.Controllers
             Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
             return View(Comments.Take(5));
         }
-        
+
+        [AllowAnonymous]
         public ActionResult Create(int? postId)
         {           
             if (postId == null)
