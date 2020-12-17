@@ -185,7 +185,13 @@ namespace BlogoSphere.Controllers
             var tta = (List<Tag>)Session["TagsToAdd"];
             if (!tta.Any(t => t.Name == name) && name.Length > 2)
             {
-                tta.Add(new Tag() { Name = name }); //, Id = tta.Count + 1 });
+                if (db.Tags.Any(t => t.Name == name))
+                {
+                    var tag = db.Tags.Where(t => t.Name == name).First();
+                    tta.Add(new Tag() { Name = name, Id = tag.Id });
+                }
+                else
+                    tta.Add(new Tag() { Name = name }); //, Id = tta.Count + 1 });
                 Session["TagsToAdd"] = tta;
             }
 
@@ -260,17 +266,17 @@ namespace BlogoSphere.Controllers
         {
             Post post = db.Posts.Find(postId);
 
-            //if (post.Tags.Any(t => t.Name == name))
-            //{
-            //    post.Tags.Remove(post.Tags.First(t => t.Name == name));
-            //    var tag = db.Tags.Where(t => t.Name == name).First();
-            //    tag.Posts.Remove(post);
+			if (post.Tags.Any(t => t.Name == name))
+			{
+				//post.Tags.Remove(post.Tags.First(t => t.Name == name));
+				var tag = db.Tags.Where(t => t.Name == name).First();
+				tag.Posts.Remove(post);
 
-            //    db.Entry(post).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //}
-            //else
-                ViewBag.TagError = "No tag by that name. Cannot remove.";
+				db.Entry(post).State = EntityState.Modified;
+				db.SaveChanges();
+			}
+			else
+				ViewBag.TagError = "No tag by that name. Cannot remove.";
         }
 
         private int GetCurrentBlogId(int? postId)
