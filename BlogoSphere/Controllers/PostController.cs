@@ -22,15 +22,13 @@ namespace BlogoSphere.Controllers
         {
             if (postId == null) return RedirectToAction("Index", "Blog" );
 
-            var blogId = GetCurrentBlogId((int)postId);
-            var post = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
+            var post = db.Posts.Include(p => p.Tags).Include(p => p.Blog).Include(p => p.Blog.Author).Where(p => p.Id == postId).FirstOrDefault();
 
             // Get UserName for current blog and compare it to the current logged in users name
             bool isOwner = false;
-            var uname = db.Users.Where(u => u.Blogs.Any(b => b.Id == blogId)).FirstOrDefault().UserName;
-            if (uname == User.Identity.Name) isOwner = true;
+            if (post.Blog.Author.UserName == User.Identity.Name) isOwner = true;
 
-            ViewBag.CurrentBlogId = blogId;
+            ViewBag.CurrentBlogId = post.BlogId;
             ViewBag.IsOwner = isOwner;
 
             if (Session[post.Id + "views"] == null)
@@ -54,30 +52,40 @@ namespace BlogoSphere.Controllers
 
             ViewBag.BlogId = blogId;
 
-            var model = db.Blogs.Include(b => b.Posts).Where(b => b.Id == blogId).Select(p => p.Posts).ToList();
+            //var model = db.Blogs
+            //    .Include(b => b.Posts)
+            //    .Include(b => b.Author)
+            //    .Where(b => b.Id == blogId)
+            //    .Select(p => p.Posts).First().ToList();
+
+            var model = db.Posts
+                .Include(p => p.Blog)
+                .Include(p => p.Blog.Author)
+                .Where(p => p.BlogId == blogId).ToList();
 
             if (model.Count == 0 || model == null)
                 return RedirectToAction("Index", "Home");
 
-            return View(model.First());
+            return View(model);
 		}
 
         public ActionResult Create(int? blogId)
 		{
             if (blogId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            Session["BlogId"] = blogId;
+
+            Post model = new Post() { BlogId = (int)blogId };
 
             // TODO: Make PopularTags work.
             ViewBag.PopularTags = db.Tags.Take(10).ToList();
             Session["TagsToAdd"] = new List<Tag>();
 
-            return View();
+            return View(model);
 		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Title,Body")] Post model) // Add image here later.
+        public ActionResult Create([Bind(Include = "ID,Title,Body,BlogId")] Post model) // Add image here later.
 		{
             if (ModelState.IsValid)
 			{
@@ -86,25 +94,12 @@ namespace BlogoSphere.Controllers
                 model.Comments = new List<Comment>();
 
                 var tta = (List<Tag>)Session["TagsToAdd"];
+                model.Tags = tta;
 
                 db.Posts.Add(model);
                 db.SaveChanges();
 
-                int pId = db.Posts.OrderByDescending(m => m.Id).First().Id;
-				foreach (var tag in tta)
-				{
-					AddTags(pId, tag.Name);
-                }
-                //AddTags(model, tta);
-
-                var user = db.Users.Find(User.Identity.GetUserId());
-                var blogid = (int)Session["BlogId"];
-                var blog = db.Blogs.Find(blogid);
-                if (blog == null)
-                    return HttpNotFound();
-
-                blog.Posts.Add(db.Posts.Find(pId));
-                db.SaveChanges();
+                int pId = db.Posts.OrderByDescending(p => p.Id).First().Id;
 
                 return RedirectToAction("Index", new { postid = pId });
             }
@@ -119,23 +114,23 @@ namespace BlogoSphere.Controllers
             if (postId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Post model = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
-            if (model == null)
-                return HttpNotFound();
+            using (var tempDb = new ApplicationDbContext())
+            {
+                Post model = tempDb.Posts.Include(p => p.Tags).Where(p => p.Id == postId).FirstOrDefault();
+                if (model == null)
+                    return HttpNotFound();
 
-            ViewBag.PopularTags = db.Tags.Take(10).ToList();
+                ViewBag.PopularTags = db.Tags.Take(10).ToList();
 
-            Session["TagsToAdd"] = new List<Tag>();
-			//Session["TagsToAdd"] = model.Tags.ToList();
+                Session["TagsToAdd"] = new List<Tag>();
 
-			foreach (var item in model.Tags)
-			{
-				AttachTag(item.Name);
-			}
-			//Session["TagsToAdd"] = model.Tags.ToList();
-			//Session["TagsToAdd"] = new List<Tag>();
+				foreach (var item in model.Tags)
+				{
+					AttachTag(item.Name);
+				}
 
-			return View(model);
+				return View(model);
+            }
 		}
 
         [HttpPost]
@@ -144,33 +139,28 @@ namespace BlogoSphere.Controllers
 		{
             if (ModelState.IsValid)
             {
-				db.Entry(model).State = EntityState.Modified;
-				db.SaveChanges();
+                using (var tempDb = new ApplicationDbContext())
+                {
+                    Post post = tempDb.Posts.Find(model.Id);
 
-				//db.Posts.Find(model.Id).Tags.Clear();
-				//db.SaveChanges();
+                    var newTags = (List<Tag>)Session["TagsToAdd"];
+                    var oldTags = post.Tags.ToList();
 
-				var tta = (List<Tag>)Session["TagsToAdd"];
-				//var tts = (List<Tag>)Session["TagsToSub"];
+					foreach (var item in oldTags)
+					{
+                        if (!newTags.Any(t => t.Name == item.Name))
+                            post.Tags.Remove(item);
+					}
 
-				//var p = db.Posts.Find(model.Id);
-				//p.Title = model.Title;
-				//p.Body = model.Body;
+					foreach (var item in newTags)
+					{
+                        if (!oldTags.Any(t => t.Name == item.Name))
+                            post.Tags.Add(tempDb.Tags.Where(t => t.Name == item.Name).FirstOrDefault() ?? item);
+					}
 
-
-				foreach (var item in tta)
-				{
-					AddTags(model.Id, item.Name);
+                    tempDb.Entry(post).State = EntityState.Modified;
+                    tempDb.SaveChanges();
 				}
-				//model.Tags = tta;
-
-				//foreach (var item in tts)
-    //            {
-    //                DeleteTag(model.Id, item.Name);
-    //            }
-
-                //db.Entry(model).State = EntityState.Modified;
-                //db.SaveChanges();
 
                 return RedirectToAction("Index", new { postid = model.Id });
 			}
@@ -185,13 +175,14 @@ namespace BlogoSphere.Controllers
             var tta = (List<Tag>)Session["TagsToAdd"];
             if (!tta.Any(t => t.Name == name) && name.Length > 2)
             {
-                if (db.Tags.Any(t => t.Name == name))
-                {
-                    var tag = db.Tags.Where(t => t.Name == name).First();
-                    tta.Add(new Tag() { Name = name, Id = tag.Id });
-                }
-                else
-                    tta.Add(new Tag() { Name = name }); //, Id = tta.Count + 1 });
+				if (db.Tags.Any(t => t.Name == name))
+				{
+					var tag = db.Tags.Where(t => t.Name == name).First();
+					tta.Add(new Tag() { Name = name, Id = tag.Id });
+				}
+				else
+					tta.Add(new Tag() { Name = name });
+
                 Session["TagsToAdd"] = tta;
             }
 
@@ -213,33 +204,6 @@ namespace BlogoSphere.Controllers
             return Json(tta, JsonRequestBehavior.AllowGet);
 		}
 
-        public void AddTags(Post post, List<Tag> tags)
-		{
-            //Post post = db.Posts.Find(postId);
-            //db.Posts.Find(postId).Tags.Clear();
-            post.Tags = new List<Tag>();
-			foreach (var item in tags)
-			{
-                if (!db.Tags.Any(t => t.Name == item.Name))
-			    {
-                    //Tag tag = new Tag() { Name = item.Name };
-                    //tag.Posts = new List<Post>();
-                    //tag.Posts.Add(post);
-                    //post.Tags.Add(item);
-
-                    db.Tags.Add(item);
-			    }
-                else
-			    {
-                    //var tag = db.Tags.Where(t => t.Name == item.Name).First();
-                    //tag.Posts.Add(post);
-			    }
-
-                post.Tags.Add(item);
-                //db.SaveChanges();
-            }
-
-        }
         public void AddTags(int postId, string name)
         {
             Post post = db.Posts.Find(postId);
@@ -268,7 +232,6 @@ namespace BlogoSphere.Controllers
 
 			if (post.Tags.Any(t => t.Name == name))
 			{
-				//post.Tags.Remove(post.Tags.First(t => t.Name == name));
 				var tag = db.Tags.Where(t => t.Name == name).First();
 				tag.Posts.Remove(post);
 

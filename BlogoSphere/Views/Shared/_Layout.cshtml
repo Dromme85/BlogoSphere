@@ -19,36 +19,39 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="@Url.Action("Index", "Home")" class="navbar-brand">
-                @*<img src="~/Content/images/bs-logo.png" width="30" /> BlogoSphere!*@
-                <img src="~/Content/images/png-transparent-blogger-social-media-logo-center-for-global-environmental-education-blog-text-rectangle-orange.png" width="40" class="rounded"/>
+			<a href="@Url.Action("Index", "Home")" class="navbar-brand d-inline-flex">
+				<img src="~/Content/images/bs-logo.png" width="40" height="40" /> <div class="h2 text-danger">logoSphere!</div>
+				@*<img src="~/Content/images/png-transparent-blogger-social-media-logo-center-for-global-environmental-education-blog-text-rectangle-orange.png" width="40" class="rounded"/>*@
 
-            </a>
+			</a>
 
-            <div class="d-none d-lg-block d-xl-block"></div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="nan navbar-nav mr-auto">
-                    @* Marks current controller as active *@
-                    <li class="nav-item @(cont == "Home" ? "active" : "")">
-                        <a>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</a>
-                    </li>
-                    <li class="nav-item @(cont == "Blog" ? "active" : "")">
-                        <a>@Html.ActionLink("My Blog", "Index", "Blog", null, new { @class = "nav-link" })</a>
-                    </li>
-                    <li class="nav-item @(cont == "Post" ? "active" : "")">
-                        <a>@Html.ActionLink("Create Blog", "Create", "Blog", null, new { @class = "nav-link" })</a>
-                    </li>
-                </ul>
+		<div class="d-none d-lg-block d-xl-block"></div>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="nan navbar-nav mr-auto">
+				@* Marks current controller as active *@
+				@*<li class="nav-item @(cont == "Home" ? "active" : "")">
+					<a>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</a>
+				</li>*@
+				<li class="nav-item @(cont == "Blog" ? "active" : "")">
+					<a>@Html.ActionLink("My Blogs", "Index", "Blog", null, new { @class = "nav-link" })</a>
+				</li>
+				<li class="nav-item @(cont == "Post" ? "active" : "")">
+					<a>@Html.ActionLink("Create Blog", "Create", "Blog", null, new { @class = "nav-link" })</a>
+				</li>
+				</ul>
 
-                <div class="col-md-4 right">
-                    @using (Html.BeginForm("DisplayBlogPostFor", "Blog", FormMethod.Get))
-                    {
-                        @Html.TextBox("CheckoutAddressBox", "", new { id = "CheckoutAddressBox" })
-                        <button class="btn success" style="background-color:orange">Search </button>}
-                </div>
-                @Html.Partial("_LoginPartial")
+				<div class="col-md-5 ml-md-auto">
+					@using (Html.BeginForm("DisplayBlogPostFor", "Blog", FormMethod.Get))
+					{
+						<div class="form-inline w-100">
+							@Html.TextBox("CheckoutAddressBox", "", new { id = "CheckoutAddressBox", @class = "form-control w-75", @placeholder = "Aa..." })
+							<button class="btn btn-danger">Search</button>
+						</div>
+					}
+				</div>
+				@Html.Partial("_LoginPartial")
 
-            </div>
+</div>
         </nav>
 	</div>
 

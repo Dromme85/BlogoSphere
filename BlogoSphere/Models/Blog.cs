@@ -23,5 +23,7 @@ namespace BlogoSphere.Models
         public DateTime Created { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
+
+        public ApplicationUser Author { get; set; }
     }
 }
