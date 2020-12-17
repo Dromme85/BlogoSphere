@@ -9,18 +9,19 @@
 	{
 	<div class="row mb-2 shadow bg-light text-light">
 		<div class="col-9 pr-0 pl-0">
-			<div class="p-1 bg-secondary">
-				@Html.DisplayFor(modelItem => item.Created)
-			</div>
+            <div class="p-1 bg-secondary">
+                @Html.DisplayFor(modelItem => item.Created)               
+            </div>
 			<div class="text-dark p-2">
 				@Html.DisplayFor(modelItem => item.Body)
 			</div>
 		</div>
 		<div class="col-3 text-right bg-secondary">
 			<div>@*Profile Image here*@</div>
-			<div class="">
-				@User.Identity.Name
-			</div>
+            <div class="">
+				@*@User.Identity.Name*@
+				@Html.DisplayFor(modelItem => item.User.UserName)
+            </div>
 			<div class="">
 				<a href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-edit text-light"></i></a>
 				<a href="@Url.Action("Delete", new { id = item.Id })"><i class="fas fa-trash-alt text-light"></i></a>

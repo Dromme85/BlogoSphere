@@ -13,23 +13,24 @@
 {
 	@Html.AntiForgeryToken()
 
-	<div class="form-horizontal mt-5" id="Comment">
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@if (auth)
-		{
-		<div class="form-group">
-			@*<h4>Comment</h4>*@
-			<div class="offset-md-2 col-md-8">
-				@Html.TextAreaFor(model => model.Body, new { @class = "form-control", @placeholder = "Write a comment..." })
-				@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
-			</div>
-		</div>
-		<div class="form-group text-right">
-			<div class="offset-md-2 col-md-8">
-				<input type="submit" value="Submit" onClick="" class="btn btn-success" />
-				<input type="reset" value="Clear" class="btn btn-danger" />
-			</div>
-		</div>
+    <div class="form-horizontal mt-5" id="Comment">
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      @if (auth)
+      {  
+        <div class="form-group" id="myform">
+            @*<h4>Comment</h4>*@
+            <div class="offset-md-2 col-md-8">
+                @Html.TextAreaFor(model => model.Body, new { @class = "form-control", @placeholder = "Write a comment..." })
+                @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group text-right">
+            <div class="offset-md-2 col-md-8">
+                <input type="submit" value="Submit" class="btn btn-success" />
+                <input type="reset" value="Clear" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
 		}
 		else
 		{
@@ -46,9 +47,7 @@
 			</div>
 		</div>
 		}
-	</div>
 }
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 }
-

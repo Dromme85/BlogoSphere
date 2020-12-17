@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using BlogoSphere.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity.Migrations;
 
 namespace BlogoSphere.Controllers
 {
@@ -15,50 +16,47 @@ namespace BlogoSphere.Controllers
     public class CommentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+       
         [AllowAnonymous]
-        public ActionResult Display(int? postId)
+        public ActionResult Display(int? postId, string userName)
         {
+            
             if (postId == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            //var Comments = db.Comments.OrderByDescending(c => c.Created).ToList();
-            var Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
-            //Comments = (List<Comment>)(from c in Comments
-            //                            orderby c.Id descending
-            //                            select c);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);            
+            
+            var Comments = db.Comments.Include(c => c.Post).Include(c => c.User).ToList();
+            Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
             return View(Comments.Take(5));
         }
 
         [AllowAnonymous]
         public ActionResult Create(int? postId)
-        {
+        {           
             if (postId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             Session["PostId"] = postId;
-
+            
             return View();           
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment)
+        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment, Uri previousUrl)
         {
             if (ModelState.IsValid)
             {
                 db.Comments.Add(comment);
                 comment.Created = DateTime.Now;
-
                 db.Posts.Find((int)Session["PostId"]).Comments.Add(comment);
                 db.Users.Find(User.Identity.GetUserId()).Comments.Add(comment);
-
                 db.SaveChanges();
-                ViewBag.message = "Comment added Successfully..!";                              
-            }
+                Response.Redirect(Request.Url.ToString(), false);
+            }         
+            ModelState.Clear();
             return View();
         }
-        // GET: Comments/Edit/5
+       
         public ActionResult Edit(int? id)
         {
             ViewBag.PreviousURL = Request.UrlReferrer;
@@ -70,13 +68,10 @@ namespace BlogoSphere.Controllers
             if (comment == null)
             {
                 return HttpNotFound();
-            }
+            }           
             return View(comment);
         }
-
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Body")] Comment comment, Uri previousUrl)
@@ -85,13 +80,13 @@ namespace BlogoSphere.Controllers
             {
                 db.Entry(comment).State = EntityState.Modified;
                 comment.Created = DateTime.Now;
+                db.Posts.Find((int)Session["PostId"]).Comments.Add(comment);
+                db.Users.Find(User.Identity.GetUserId()).Comments.Add(comment);
                 db.SaveChanges();                
             }
-            return Redirect(previousUrl.ToString());
-            //return View();
+            return Redirect(previousUrl.ToString());           
         }
-
-        // GET: Comments/Delete/5
+       
         public ActionResult Delete(int? id)
         {
             ViewBag.PreviousURL = Request.UrlReferrer;
@@ -106,8 +101,7 @@ namespace BlogoSphere.Controllers
             }
             return View();
         }
-
-        // POST: Comments/Delete/5
+      
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id, Uri previousUrl)
@@ -115,8 +109,7 @@ namespace BlogoSphere.Controllers
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return Redirect(previousUrl.ToString());
-            //return View();
+            return Redirect(previousUrl.ToString());           
         }
     }
 }
