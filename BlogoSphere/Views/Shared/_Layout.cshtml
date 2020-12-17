@@ -20,7 +20,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a href="@Url.Action("Index", "Home")" class="navbar-brand">
-                <img src="~/Content/images/bs-logo.png" width="30" /> BlogoSphere!
+                @*<img src="~/Content/images/bs-logo.png" width="30" /> BlogoSphere!*@
+                <img src="~/Content/images/png-transparent-blogger-social-media-logo-center-for-global-environmental-education-blog-text-rectangle-orange.png" width="40" class="rounded"/>
+
             </a>
 
             <div class="d-none d-lg-block d-xl-block"></div>
@@ -37,15 +39,14 @@
                         <a>@Html.ActionLink("Create Blog", "Create", "Blog", null, new { @class = "nav-link" })</a>
                     </li>
                 </ul>
+
+                <div class="col-md-4 right">
+                    @using (Html.BeginForm("DisplayBlogPostFor", "Blog", FormMethod.Get))
+                    {
+                        @Html.TextBox("CheckoutAddressBox", "", new { id = "CheckoutAddressBox" })
+                        <button class="btn success" style="background-color:orange">Search </button>}
+                </div>
                 @Html.Partial("_LoginPartial")
-            </div>
-            <div class="col-md-4 right">
-                @using (Html.BeginForm("DisplayBlogPostFor", "Blog", FormMethod.Get))
-                {
-        @Html.TextBox("CheckoutAddressBox", "", new { id = "CheckoutAddressBox" })
-                        <button class="btn success" style="background-color:orange">Search </button>            }
-
-
 
             </div>
         </nav>
