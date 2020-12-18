@@ -10,7 +10,9 @@
 </p>
 
 <div class="container">
-@foreach (var item in Model)
+	@if(Model !=null)
+	{
+foreach (var item in Model)
 {
 	<div class="row w-100 bg-warning mb-2 shadow rounded">
 		<div class="d-inline-flex w-100">
@@ -24,5 +26,6 @@
 			<div class="text-right text-info mt-0 pr-3">@Html.DisplayFor(modelItem => item.Views) Views</div>
 		</div>
 	</div>
+}
 }
 </div>

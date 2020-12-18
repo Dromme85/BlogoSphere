@@ -16,6 +16,7 @@ namespace BlogoSphere.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        static int bv = 0;
         // GET: Blogs
         public ActionResult Index()
         {
@@ -42,6 +43,15 @@ namespace BlogoSphere.Controllers
             {
                 return HttpNotFound();
             }
+            if (Session[blog.Id + "views"] == null)
+                bv = blog.Views + 1;
+            else
+                bv = (int)Session[blog.Id + "views"] + 1;
+            Session[blog.Id + "views"] = bv;
+
+            blog.Views = (int)Session[blog.Id + "views"];
+            db.Entry(blog).State = EntityState.Modified;
+            db.SaveChanges();
             return View(blog);
         }
 
@@ -61,6 +71,7 @@ namespace BlogoSphere.Controllers
             if (ModelState.IsValid)
             {
                 blog.Created = DateTime.Now;
+                blog.Views = 0;
                 db.Blogs.Add(blog);
                 db.Users.Find(User.Identity.GetUserId()).Blogs.Add(blog);
                 db.SaveChanges();
