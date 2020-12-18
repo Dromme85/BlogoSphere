@@ -5,13 +5,13 @@
 }
 
 <div>
-	<dl class="alert-info">
+	<dl class="">
 		
 		<dd>
 			<h2 style="color:coral">@Html.DisplayFor(model => model.Title)</h2>
 		</dd>
 
-		<dd >
+		<dd>
 			@Html.DisplayFor(model => model.Body)
 		</dd>
 
@@ -25,6 +25,5 @@
 	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
 	@Html.ActionLink("Back to List", "Index")
 </p>*@
-@*<hr />*@
-@*<div class="">@Html.Action("List", "Post", new { blogid = Model.Id })</div>*@
-
+<hr />
+<div class="">@Html.Action("List", "Post", new { blogid = Model.Id })</div>

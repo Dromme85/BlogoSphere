@@ -1,82 +1,78 @@
 ﻿@model BlogoSphere.Models.BlogPostVM
 
 @{
-    ViewBag.Title = "DisplayBlogFor";
+	ViewBag.Title = "DisplayBlogFor";
 }
 
 <h2 style="color:coral">DisplayBlogFor</h2>
-<div class ="row">
-    <div class=" =col-6">
-        <table border="0" style="background-color:lightgray" cellpadding="15">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Created</th>
-                    <th>Blog/Post</th>
-                </tr>
-            </thead>
-            
+<div class="row">
+	<div class="col-6">
+		<table border="0" style="background-color:lightgray" cellpadding="15">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Created</th>
+					<th>Blog/Post</th>
+				</tr>
+			</thead>
 
-            @if (Model.BlogList.Count() == 0 && Model.PostList.Count() == 0)
-            {
-                <tr>
-                    <td colspan="3" class="text-danger">
-                        No matching Blog found.
-                    </td>
-                </tr>
-            }
-            else
+			@if (Model.BlogList.Count() == 0)
+			{
+				<tr>
+					<td colspan="3" class="text-danger">
+						No matching data found.
+					</td>
+				</tr>
+			}
+			else
+			{
+				foreach (var item in Model.BlogList)
+				{
+					<tr>
+						<td>
+							<a href=@Url.Action("Details", "Blog", new { id = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a>
+						</td>
 
-            {
-                foreach (var item in Model.BlogList)
-                {
-                    <tr>
-                        <td>
-                            <a href=@Url.Action("Details", "Blog", new { id = item.Id })>@Html.DisplayFor(modelItem => item.Title)</a>
-                        </td>
+						<td>@Html.DisplayFor(modelItem => item.Created)</td>
 
-                        <td>@Html.DisplayFor(modelItem => item.Created)</td>
+						<td>Blog</td>
+					</tr>
+				}
+			}
+		</table>
+	</div>
+	<div class="col-6">
+		<table border="0" style="background-color:lightgray" cellpadding="15">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Created</th>
+					<th>Blog/Post</th>
+				</tr>
+			</thead>
 
-                        <td>Blog</td>
-                    </tr>
-                }
-            }
-        </table>
-</div>
-<div class="col-6">
-    <table border="0" style="background-color:lightgray" cellpadding="15">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Blog Name </th>
-                <th>Created</th>
-                <th>Blog/Post</th>
-            </tr>
-        </thead>
-        @if (Model.PostList.Count() == 0)
-        {
-    <tr>
-        <td colspan="3" class="text-danger">
-            No matching Post found.
-        </td>
-    </tr>           
-        }
-        else
-        { 
+			@if (Model.PostList.Count() == 0)
+			{
+				<tr>
+					<td colspan="3" class="text-danger">
+						No matching data found.
+					</td>
+				</tr>
+			}
+			else
+			{
+				foreach (var item in Model.PostList)
+				{
+					<tr>
+						<td>
+							<a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a>
+						</td>
+						<td>@Html.DisplayFor(modelItem => item.Created)</td>
+						<td>Post</td>
+					</tr>
+				}
+			}
 
-        foreach (var item in Model.PostList)
-        {
-        <tr>
-            <td>
-                <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a>
-            </td>
-            <td>@Html.DisplayFor(blogitem => item.Title)</td>
-            <td>@Html.DisplayFor(modelItem => item.Created)</td>
-            <td>Post</td>
-        </tr>
-        }
-        }
-
-    </table>
-    </div>
+		</table>
+	</div>
 </div>

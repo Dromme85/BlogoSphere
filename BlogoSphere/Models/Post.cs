@@ -31,5 +31,9 @@ namespace BlogoSphere.Models
 		public virtual ICollection<Comment> Comments { get; set; }
 
 		public virtual ICollection<Tag> Tags { get; set; }
+
+		public Blog Blog { get; set; }
+
+		public int BlogId { get; set; }
 	}
 }
