@@ -88,7 +88,6 @@ namespace BlogoSphere.Controllers
             return Redirect(previousUrl.ToString());           
         }
 
-        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             ViewBag.PreviousURL = Request.UrlReferrer;

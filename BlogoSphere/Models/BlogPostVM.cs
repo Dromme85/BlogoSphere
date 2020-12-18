@@ -5,12 +5,12 @@ using System.Web;
 
 namespace BlogoSphere.Models
 {
-    public class BlogPostVM
+    public class SearchVM
     {
         public List<Blog> BlogList { get; set; }
         public List<Post> PostList { get; set; }
-        public String searching { get; set; }
-        public BlogPostVM()
+        public string SearchText { get; set; }
+        public SearchVM()
         {
             BlogList = new List<Blog>();
             PostList = new List<Post>();

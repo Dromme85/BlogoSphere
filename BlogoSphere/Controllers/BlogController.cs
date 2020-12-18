@@ -17,11 +17,16 @@ namespace BlogoSphere.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Blogs
-        [AllowAnonymous]
         public ActionResult Index()
         {
+            //var blogs = new List<Blog>();
+            var uid = User.Identity.GetUserId();
+            var blogs = db.Blogs.Include(b => b.Author).Where(b => b.Author.Id == uid).ToList();
         
-            return View(db.Blogs.ToList());
+            if (blogs != null)
+                return View(blogs);
+
+            return View();
         }
 
         // GET: Blogs/Details/5
@@ -78,17 +83,22 @@ namespace BlogoSphere.Controllers
 
         //    return View(db.Blogs.Where(b => b.Title.Contains(CheckoutAddressBox))  CheckoutAddressBox ==null).ToList());
         //}
-        public ActionResult DisplayBlogPostFor(string CheckoutAddressBox)
+
+        [AllowAnonymous]
+        public ActionResult DisplayBlogPostFor(string SearchBox)
         {
-            BlogPostVM obj = new BlogPostVM();
-             if (CheckoutAddressBox != null)
+            SearchVM obj = new SearchVM();
+
+            if (SearchBox != null)
             {
-                obj.BlogList = db.Blogs.Where(b =>  b.Title.Contains(CheckoutAddressBox)).ToList();
-                obj.PostList = db.Posts.Where(p =>  p.Title.Contains(CheckoutAddressBox)).ToList();
-                obj.searching = CheckoutAddressBox;
+                obj.BlogList = db.Blogs.Include(b => b.Author).Where(b =>  b.Title.Contains(SearchBox)).ToList();
+                obj.PostList = db.Posts.Include(p => p.Blog).Include(p => p.Blog.Author).Where(p =>  p.Title.Contains(SearchBox)).ToList();
+                obj.SearchText = SearchBox;
             }
-               return View(obj);
+
+            return View(obj);
         }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
