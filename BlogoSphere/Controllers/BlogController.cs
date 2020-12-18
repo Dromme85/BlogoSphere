@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BlogoSphere.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BlogoSphere.Controllers
 {
@@ -56,8 +57,10 @@ namespace BlogoSphere.Controllers
             {
                 blog.Created = DateTime.Now;
                 db.Blogs.Add(blog);
+                db.Users.Find(User.Identity.GetUserId()).Blogs.Add(blog);
                 db.SaveChanges();
                 ViewBag.message = "Blog Details are saved Successfully..!";
+
 
                 return RedirectToAction("Index");
             }

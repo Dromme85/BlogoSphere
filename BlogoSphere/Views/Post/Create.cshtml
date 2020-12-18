@@ -49,6 +49,7 @@
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
+	@Html.HiddenFor(model => model.BlogId)
 
 	<div class="container">
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
