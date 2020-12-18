@@ -37,11 +37,28 @@ namespace BlogoSphere.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = db.Blogs.Find(id);
+            Blog blog = db.Blogs.Include(b => b.Author).Where(b => b.Id == id).FirstOrDefault();
             if (blog == null)
             {
                 return HttpNotFound();
             }
+
+            //var postsByDate =
+            //    from p in blog.Posts
+            //    group p by p.Created.Year into yg
+            //    select new
+            //    {
+            //        Year = yg.Key,
+            //        MonthGroups =
+            //            from o in yg
+            //            group o by o.Created.Month into mg
+            //            select new { Month = mg.Key, Posts = mg }
+            //    };
+
+            
+
+            //ViewBag.pbd = postsByDate;
+
             return View(blog);
         }
 
