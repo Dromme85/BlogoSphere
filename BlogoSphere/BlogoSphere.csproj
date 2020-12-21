@@ -173,6 +173,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -369,6 +370,9 @@
     <Content Include="Views\Comment\Display.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Blog\DisplayBlogPostFor.cshtml" />
+    <Content Include="Views\Browse\BrowseViews.cshtml" />
+    <Content Include="Views\Browse\BrowseTagTabs.cshtml" />
+    <Content Include="Views\Browse\BrowseTags.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
