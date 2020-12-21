@@ -370,6 +370,7 @@
     <Content Include="Views\Comment\Display.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Blog\DisplayBlogPostFor.cshtml" />
+    <Content Include="Views\Post\Details.cshtml" />
     <Content Include="Views\Browse\BrowseViews.cshtml" />
     <Content Include="Views\Browse\BrowseTagTabs.cshtml" />
     <Content Include="Views\Browse\BrowseTags.cshtml" />
