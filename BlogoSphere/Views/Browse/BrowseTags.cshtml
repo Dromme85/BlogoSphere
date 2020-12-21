@@ -1,10 +1,5 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Post>
 
-@*@{
-    Layout = null;
-}*@
-
-
 <table class="table">
     <tr>
         <th>
@@ -13,46 +8,51 @@
         <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Body)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Created)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Views)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Image)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Blog.Author)
         </th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Blog.Title)
-            </td>
-            <td>
-                <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
+<tr>
+    <td>
+        <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+            @Html.DisplayFor(modelItem => item.Blog.Title)
+            </a>
+    </td>
+    <td>
+        <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
 
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Views)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-        </tr>
+            @Html.DisplayFor(modelItem => item.Title)
+        </a>
+    </td>
+    @*<td>
+            @Html.DisplayFor(modelItem => item.Body)
+        </td>*@
+    <td>
+        @Html.DisplayFor(modelItem => item.Created)
+    </td>
+    <td>
+            @Html.DisplayFor(modelItem => item.Views)
+        </td>
+    <td>
+    @Html.DisplayFor(modelItem => item.Blog.Author.UserName)
+    </td>
+</tr>
     }
 
 </table>
