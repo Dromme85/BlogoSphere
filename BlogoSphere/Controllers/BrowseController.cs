@@ -21,7 +21,7 @@ namespace BlogoSphere.Controllers
 
         public ActionResult BrowseTagTabs()
         {
-            ViewBag.PopularTags = db.Tags.Take(10).ToList();
+            ViewBag.PopularTags = db.Tags.ToList();
             Session["TagsToAdd"] = new List<Tag>();
 
             //var PoularTags = db.Tags.ToList();
