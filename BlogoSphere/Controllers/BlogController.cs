@@ -16,6 +16,7 @@ namespace BlogoSphere.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        static int bv = 0;
         // GET: Blogs
         public ActionResult Index()
         {
@@ -60,22 +61,17 @@ namespace BlogoSphere.Controllers
                     ViewBag.DatePosts = posts;
                 }
 			}
-            //var postsByDate =
-            //    from p in blog.Posts
-            //    group p by p.Created.Year into yg
-            //    select new
-            //    {
-            //        Year = yg.Key,
-            //        MonthGroups =
-            //            from o in yg
-            //            group o by o.Created.Month into mg
-            //            select new { Month = mg.Key, Posts = mg }
-            //    };
 
+            if (Session[blog.Id + "views"] == null)
+                bv = blog.Views + 1;
+            else
+                bv = (int)Session[blog.Id + "views"] + 1;
+            Session[blog.Id + "views"] = bv;
+
+            blog.Views = (int)Session[blog.Id + "views"];
+            db.Entry(blog).State = EntityState.Modified;
+            db.SaveChanges();
             
-
-            //ViewBag.pbd = postsByDate;
-
             return View(blog);
         }
 
@@ -95,6 +91,7 @@ namespace BlogoSphere.Controllers
             if (ModelState.IsValid)
             {
                 blog.Created = DateTime.Now;
+                blog.Views = 0;
                 db.Blogs.Add(blog);
                 db.Users.Find(User.Identity.GetUserId()).Blogs.Add(blog);
                 db.SaveChanges();
