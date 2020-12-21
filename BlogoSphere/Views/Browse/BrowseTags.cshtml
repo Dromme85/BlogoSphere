@@ -35,7 +35,10 @@
                 @Html.DisplayFor(modelItem => item.Blog.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
+
+                    @Html.DisplayFor(modelItem => item.Title)
+                </a>                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Body)

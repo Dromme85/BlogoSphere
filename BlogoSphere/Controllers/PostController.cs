@@ -137,16 +137,23 @@ namespace BlogoSphere.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Body,Created,Views,Image")] Post model)
 		{
+            var original_data = db.Posts.AsNoTracking().FirstOrDefault();
+
             if (ModelState.IsValid)
             {
+                db.Entry(model).State = EntityState.Modified;
+                model.Created = original_data.Created;
+                model.BlogId = original_data.BlogId;
+                db.SaveChanges();
+
                 using (var tempDb = new ApplicationDbContext())
                 {
                     Post post = tempDb.Posts.Find(model.Id);
 
                     var newTags = (List<Tag>)Session["TagsToAdd"];
-                    var oldTags = post.Tags.ToList();
+                    var oldTags = post.Tags.ToList();                   
 
-					foreach (var item in oldTags)
+                    foreach (var item in oldTags)
 					{
                         if (!newTags.Any(t => t.Name == item.Name))
                             post.Tags.Remove(item);
@@ -157,10 +164,11 @@ namespace BlogoSphere.Controllers
                         if (!oldTags.Any(t => t.Name == item.Name))
                             post.Tags.Add(tempDb.Tags.Where(t => t.Name == item.Name).FirstOrDefault() ?? item);
 					}
-
+                
                     tempDb.Entry(post).State = EntityState.Modified;
-                    tempDb.SaveChanges();
-				}
+                    tempDb.SaveChanges();                   
+                    
+                }                
 
                 return RedirectToAction("Index", new { postid = model.Id });
 			}

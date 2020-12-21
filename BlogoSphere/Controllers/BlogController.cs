@@ -131,10 +131,11 @@ namespace BlogoSphere.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Body")] Blog blog)
         {
+            var original_data = db.Blogs.AsNoTracking().FirstOrDefault();
             if (ModelState.IsValid)
             {
                 db.Entry(blog).State = EntityState.Modified;
-                blog.Created = DateTime.Now;
+                blog.Created = original_data.Created;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
