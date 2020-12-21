@@ -5,6 +5,11 @@
 	ViewBag.Title = "Edit";
 	var popTags = (List<Tag>)ViewBag.PopularTags;
 	var tags = (List<Tag>)Session["TagsToAdd"];
+	var charsLeft = 1024;
+	if (Model.Body != null)
+	{
+		charsLeft -= Model.Body.Length;
+	}
 }
 
 <script>
@@ -40,6 +45,15 @@
 			}
 		});
 	}
+	function countChar(val) {
+		var len = val.value.length;
+		if (len >= 1024) {
+			val.value = val.value(0, 1024);
+		}
+		else {
+			$('#charCount').text(1024 - len);
+		}
+	}
 </script>
 
 <br />
@@ -59,7 +73,7 @@
 		<div class="form-group row">
 			@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "col-form-label col-md-2 text-md-right" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control w-50", @placeholder = "Title here ..." } })
+				@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control col-md-7", @placeholder = "Title here ..." } })
 				@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -67,7 +81,8 @@
 		<div class="form-group row">
 			@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "col-form-label col-md-2 text-md-right" })
 			<div class="col-md-10">
-				@Html.TextAreaFor(model => model.Body, new { @class = "form-control w-75", @placeholder = "Write your post here ..." })
+				@Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-9", @placeholder = "Write your post here ...", @onkeyup = "countChar(this)" })
+				<div class="offset-lg-7 offset-6 text-center text-light p-1 rounded-bottom text-nowrap" style="background-color:darkgray; width:100px;"><span id="charCount">@charsLeft</span> / 1024</div>
 				@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
 			</div>
 		</div>
