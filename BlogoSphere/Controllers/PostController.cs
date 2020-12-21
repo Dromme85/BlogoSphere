@@ -63,8 +63,6 @@ namespace BlogoSphere.Controllers
         public ActionResult List(List<Post> posts)
         {
             ViewBag.BlogId = posts.FirstOrDefault().BlogId;
-            if (model.Count == 0 || model == null)
-                return View();
 
             return View(posts);
 		}
