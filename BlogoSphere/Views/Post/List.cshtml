@@ -1,31 +1,27 @@
-﻿
+﻿@*@model BlogoSphere.Models.Post*@
 @model IEnumerable<BlogoSphere.Models.Post>
 
 @{
 	Layout = null;
 }
 
-<p>
-    @Html.ActionLink("Create New Blogpost", "Create", new { blogid = ViewBag.BlogId })
-</p>
-
-<div class="container">
-	@if(Model !=null)
+<div class="container pl-4">
+	@if (Model != null)
 	{
-foreach (var item in Model)
-{
-	<div class="row w-100 bg-warning mb-2 shadow rounded">
-		<div class="d-inline-flex w-100">
-			<div class="text-center p-2 text-uppercase"><a class="pl-3 h2 text-decoration-none text-info" href=@Url.Action("Index", new { postid = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a></div>
-			<div class="ml-auto text-light bg-info p-2 mt-3 rounded-left">Created @item.Created by @item.Blog.Author.UserName</div>
+		foreach (var item in Model)
+		{
+		<div class="row w-100 bg-warning mb-2 shadow rounded">
+			<div class="d-inline-flex w-100">
+				<div class="text-center p-2 text-uppercase"><a class="pl-3 h2 text-decoration-none text-info" href=@Url.Action("Index", new { postid = item.Id })>@Html.DisplayFor(modelItem => item.Title)</a></div>
+				<div class="ml-auto text-light bg-info p-2 mt-3 rounded-left">Created @item.Created</div> @*by @item.Blog.Author.UserName</div>*@
+			</div>
+			<div class="bg-white m-0 p-3 w-100 text-truncate" style="max-height:100px;">
+				@Html.DisplayFor(modelItem => item.Body)
+			</div>
+			<div class="w-100 p-1">
+				<div class="text-right text-info mt-0 pr-3">@Html.DisplayFor(modelItem => item.Views) Views</div>
+			</div>
 		</div>
-		<div class="bg-white m-0 p-3 w-100 text-truncate" style="max-height:100px;">
-			@Html.DisplayFor(modelItem => item.Body)
-		</div>
-		<div class="w-100 p-1">
-			<div class="text-right text-info mt-0 pr-3">@Html.DisplayFor(modelItem => item.Views) Views</div>
-		</div>
-	</div>
-}
-}
+		}
+	}
 </div>

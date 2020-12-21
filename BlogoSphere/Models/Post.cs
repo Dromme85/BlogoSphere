@@ -16,6 +16,7 @@ namespace BlogoSphere.Models
 
 		[Required]
 		[StringLength(1024)]
+		[DataType(DataType.MultilineText)]
 		public string Body { get; set; }
 
 		[Required]

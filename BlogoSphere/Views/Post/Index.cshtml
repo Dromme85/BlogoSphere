@@ -23,7 +23,8 @@
 	</div>
 	<hr />
 	<div class="offset-md-2 col-md-8">
-		<p disabled>@Html.DisplayFor(modelItem => Model.Body)</p>
+		<p disabled style="white-space:pre;">@Html.DisplayFor(modelItem => Model.Body)</p>
+		@*<p disabled style="white-space:pre;">@Html.Raw(Html.Encode(Model.Body))</p>*@
 	</div>
 </div>
 

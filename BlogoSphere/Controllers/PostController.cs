@@ -20,9 +20,13 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
-            if (postId == null) return RedirectToAction("Index", "Blog" );
+            if (postId == null) return RedirectToAction("Index", "Blog");
 
-            var post = db.Posts.Include(p => p.Tags).Include(p => p.Blog).Include(p => p.Blog.Author).Where(p => p.Id == postId).FirstOrDefault();
+            var post = db.Posts
+                .Include(p => p.Tags)
+                .Include(p => p.Blog)
+                .Include(p => p.Blog.Author)
+                .Where(p => p.Id == postId).FirstOrDefault();
 
             // Get UserName for current blog and compare it to the current logged in users name
             bool isOwner = false;
@@ -33,7 +37,7 @@ namespace BlogoSphere.Controllers
 
             if (Session[post.Id + "views"] == null)
                 pv = post.Views + 1;
-			else
+            else
                 pv = (int)Session[post.Id + "views"] + 1;
             Session[post.Id + "views"] = pv;
 
@@ -45,29 +49,26 @@ namespace BlogoSphere.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult List(int? blogId)
-		{
-            if (blogId == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        public ActionResult Details(Post post)
+        {
+            ViewBag.BlogId = post.BlogId;
 
-            ViewBag.BlogId = blogId;
+            if (post == null)
+                return View();
 
-            //var model = db.Blogs
-            //    .Include(b => b.Posts)
-            //    .Include(b => b.Author)
-            //    .Where(b => b.Id == blogId)
-            //    .Select(p => p.Posts).First().ToList();
+            return View(post);
+        }
 
-            var model = db.Posts
-                .Include(p => p.Blog)
-                .Include(p => p.Blog.Author)
-                .Where(p => p.BlogId == blogId).ToList();
-
+        [AllowAnonymous]
+        public ActionResult List(List<Post> posts)
+        {
+            ViewBag.BlogId = posts.FirstOrDefault().BlogId;
             if (model.Count == 0 || model == null)
                 return View();
 
-            return View(model);
+            return View(posts);
 		}
+
 
         public ActionResult Create(int? blogId)
 		{
@@ -77,7 +78,14 @@ namespace BlogoSphere.Controllers
             Post model = new Post() { BlogId = (int)blogId };
 
             // TODO: Make PopularTags work.
-            ViewBag.PopularTags = db.Tags.Take(10).ToList();
+            ViewBag.PopularTags = db.Posts
+                .Include(p => p.Blog.Author)
+                .SelectMany(p => p.Tags)
+                .GroupBy(t => t, (k, g) => new { Tag = k, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Select(g => g.Tag)
+                .Take(10).ToList();
+
             Session["TagsToAdd"] = new List<Tag>();
 
             return View(model);
@@ -87,13 +95,14 @@ namespace BlogoSphere.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Title,Body,BlogId")] Post model) // Add image here later.
 		{
+            var tta = (List<Tag>)Session["TagsToAdd"];
+
             if (ModelState.IsValid)
 			{
                 model.Created = DateTime.Now;
                 model.Views = 0;
                 model.Comments = new List<Comment>();
 
-                var tta = (List<Tag>)Session["TagsToAdd"];
                 model.Tags = tta;
 
                 db.Posts.Add(model);
@@ -104,7 +113,20 @@ namespace BlogoSphere.Controllers
                 return RedirectToAction("Index", new { postid = pId });
             }
 
-            ViewBag.PopularTags = db.Tags.Take(10).ToList();
+            var popularTags = db.Posts
+                .SelectMany(p => p.Tags)
+                .GroupBy(t => t, (k, g) => new { Tag = k, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Select(g => g.Tag)
+                .ToList();
+
+			foreach (var tag in tta)
+			{
+                if (popularTags.Any(m => m.Id == tag.Id))
+                    popularTags.Remove(popularTags.Where(t => t.Id == tag.Id).First());
+			}
+
+            ViewBag.PopularTags = popularTags.Take(10).ToList();
 
             return View(model);
 		}
@@ -120,8 +142,6 @@ namespace BlogoSphere.Controllers
                 if (model == null)
                     return HttpNotFound();
 
-                ViewBag.PopularTags = db.Tags.Take(10).ToList();
-
                 Session["TagsToAdd"] = new List<Tag>();
 
 				foreach (var item in model.Tags)
@@ -129,7 +149,22 @@ namespace BlogoSphere.Controllers
 					AttachTag(item.Name);
 				}
 
-				return View(model);
+                var popularTags = db.Posts
+                    .SelectMany(p => p.Tags)
+                    .GroupBy(t => t, (k, g) => new { Tag = k, Count = g.Count() })
+                    .OrderByDescending(g => g.Count)
+                    .Select(g => g.Tag)
+                    .ToList();
+
+                foreach (var tag in model.Tags)
+                {
+                    if (popularTags.Any(m => m.Id == tag.Id))
+                        popularTags.Remove(popularTags.Where(t => t.Id == tag.Id).First());
+                }
+
+                ViewBag.PopularTags = popularTags.Take(10).ToList();
+
+                return View(model);
             }
 		}
 
@@ -137,11 +172,14 @@ namespace BlogoSphere.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Body,Created,Views,Image")] Post model)
 		{
+
             if (ModelState.IsValid)
             {
                 using (var tempDb = new ApplicationDbContext())
                 {
                     Post post = tempDb.Posts.Find(model.Id);
+                    post.Title = model.Title;
+                    post.Body = model.Body;
 
                     var newTags = (List<Tag>)Session["TagsToAdd"];
                     var oldTags = post.Tags.ToList();
@@ -165,7 +203,20 @@ namespace BlogoSphere.Controllers
                 return RedirectToAction("Index", new { postid = model.Id });
 			}
 
-            ViewBag.PopularTags = db.Tags.Take(10).ToList();
+            var popularTags = db.Posts
+                .SelectMany(p => p.Tags)
+                .GroupBy(t => t, (k, g) => new { Tag = k, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Select(g => g.Tag)
+                .ToList();
+
+            foreach (var tag in model.Tags)
+            {
+                if (popularTags.Any(m => m.Id == tag.Id))
+                    popularTags.Remove(popularTags.Where(t => t.Id == tag.Id).First());
+            }
+
+            ViewBag.PopularTags = popularTags.Take(10).ToList();
 
             return View(model);
 		}
@@ -242,6 +293,7 @@ namespace BlogoSphere.Controllers
 				ViewBag.TagError = "No tag by that name. Cannot remove.";
         }
 
+        // Possible to remove now?
         private int GetCurrentBlogId(int? postId)
 		{
             return db.Blogs.Include(b => b.Posts).Where(b => b.Posts.Any(p => p.Id == postId)).First().Id;
