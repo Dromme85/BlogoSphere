@@ -31,7 +31,7 @@ namespace BlogoSphere.Controllers
 
         // GET: Blogs/Details/5
         [AllowAnonymous]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? year, int? month)
         {
             if (id == null)
             {
@@ -43,6 +43,23 @@ namespace BlogoSphere.Controllers
                 return HttpNotFound();
             }
 
+            if (year != null)
+			{
+                if (month != null)
+				{
+                    // Get all posts of 'year/month'
+                    DateTime ym = new DateTime((int)year, (int)month, 01);
+                    var posts = db.Posts.Where(p => p.Created.Year == ym.Year && p.Created.Month == ym.Month && p.BlogId == id).ToList();
+                    ViewBag.DatePosts = posts;
+				}
+				else
+                {
+                    // Get all posts of 'year'
+                    DateTime y = new DateTime((int)year, 01, 01);
+                    var posts = db.Posts.Where(p => p.Created.Year == y.Year && p.BlogId == id).ToList();
+                    ViewBag.DatePosts = posts;
+                }
+			}
             //var postsByDate =
             //    from p in blog.Posts
             //    group p by p.Created.Year into yg

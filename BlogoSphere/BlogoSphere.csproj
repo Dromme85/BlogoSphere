@@ -369,6 +369,7 @@
     <Content Include="Views\Comment\Display.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Blog\DisplayBlogPostFor.cshtml" />
+    <Content Include="Views\Post\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

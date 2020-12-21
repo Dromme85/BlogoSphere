@@ -20,7 +20,7 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? postId)
         {
-            if (postId == null) return RedirectToAction("Index", "Blog" );
+            if (postId == null) return RedirectToAction("Index", "Blog");
 
             var post = db.Posts
                 .Include(p => p.Tags)
@@ -37,7 +37,7 @@ namespace BlogoSphere.Controllers
 
             if (Session[post.Id + "views"] == null)
                 pv = post.Views + 1;
-			else
+            else
                 pv = (int)Session[post.Id + "views"] + 1;
             Session[post.Id + "views"] = pv;
 
@@ -49,23 +49,24 @@ namespace BlogoSphere.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult List(Post post)
-		{
-            //if (blogId == null)
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
+        public ActionResult Details(Post post)
+        {
             ViewBag.BlogId = post.BlogId;
-
-            //var model = db.Posts
-            //    .Include(p => p.Blog)
-            //    .Include(p => p.Blog.Author)
-            //    .Where(p => p.BlogId == blogId).ToList();
 
             if (post == null)
                 return View();
 
             return View(post);
+        }
+
+        [AllowAnonymous]
+        public ActionResult List(List<Post> posts)
+        {
+            ViewBag.BlogId = posts.FirstOrDefault().BlogId;
+
+            return View(posts);
 		}
+
 
         public ActionResult Create(int? blogId)
 		{
@@ -175,6 +176,8 @@ namespace BlogoSphere.Controllers
                 using (var tempDb = new ApplicationDbContext())
                 {
                     Post post = tempDb.Posts.Find(model.Id);
+                    post.Title = model.Title;
+                    post.Body = model.Body;
 
                     var newTags = (List<Tag>)Session["TagsToAdd"];
                     var oldTags = post.Tags.ToList();
