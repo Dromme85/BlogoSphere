@@ -20,16 +20,24 @@ namespace BlogoSphere.Controllers
             return View(blogs);
         }
 
-        public ActionResult BrowseTagTabs()
-        {           
+        public ActionResult BrowseTagTabs(int? tagId)
+        {
+            ViewBag.BrowseTagId = tagId;
+
             var PoularTags = db.Tags.ToList();
             return View(PoularTags);           
         }
         
-        public ActionResult BrowseTags()
+        public ActionResult BrowseTags(int? tagId)
         {
-            var TagResult = db.Posts.Include(p => p.Blog).Include(p=>p.Blog.Author).ToList();
-            return View(TagResult);
+            List<Post> tagResult = null;
+            if (tagId != null && db.Tags.Any(t => t.Id == tagId))
+                tagResult = db.Posts
+                    .Include(p => p.Blog)
+                    .Include(p=>p.Blog.Author)
+                    .Where(p => p.Tags.Any(t => t.Id == tagId)).ToList();
+
+            return View(tagResult);
         }
     }
 }
