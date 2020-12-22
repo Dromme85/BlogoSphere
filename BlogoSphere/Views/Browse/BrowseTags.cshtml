@@ -1,58 +1,64 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Post>
 
-@*@{
-    Layout = null;
-}*@
+<div>
+    @Html.ActionLink("Browse with Views", "BrowseViews")
+    @Html.ActionLink("Browse with Tags", "BrowseTagTabs")
+</div>
 
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Blog.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Body)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Created)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Views)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Image)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<div class="w-100">
+    <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Blog.Title)
-            </td>
-            <td>
-                <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
-
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Views)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Blog.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Body)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Views)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Blog.Author)
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+                        @Html.DisplayFor(modelItem => item.Blog.Title)
+                    </a>
+                </td>
+                <td>
+                    <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
+
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Views)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Blog.Author.UserName)
+                </td>
+            </tr>
+        }
+    </table>
+</div>

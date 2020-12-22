@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace BlogoSphere.Controllers
 {
@@ -13,26 +14,21 @@ namespace BlogoSphere.Controllers
         // GET: Browse
         public ActionResult BrowseViews()
         {
-            var blogs = db.Blogs.OrderByDescending(v=>v.Views).ToList();
+            var blogs = db.Blogs.Include(b => b.Author).OrderByDescending(v => v.Views).ToList();
             if (blogs != null)
                 return View(blogs);
             return View(blogs);
         }
 
         public ActionResult BrowseTagTabs()
-        {
-            ViewBag.PopularTags = db.Tags.ToList();
-            Session["TagsToAdd"] = new List<Tag>();
-
-            //var PoularTags = db.Tags.ToList();
-            //return View(PoularTags);
-
-            return View(ViewBag.PopularTags);
+        {           
+            var PoularTags = db.Tags.ToList();
+            return View(PoularTags);           
         }
         
         public ActionResult BrowseTags()
         {
-            var TagResult = db.Posts.ToList();
+            var TagResult = db.Posts.Include(p => p.Blog).Include(p=>p.Blog.Author).ToList();
             return View(TagResult);
         }
     }

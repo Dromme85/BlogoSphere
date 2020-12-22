@@ -2,70 +2,19 @@
 @using BlogoSphere.Models
 @{
     ViewBag.Title = "BrowseTagTabs";
-    var popTags = (List<Tag>)ViewBag.PopularTags;
-    var tags = (List<Tag>)Session["TagsToAdd"];
 }
 
-<script>
-    // TODO: Move this script to script file.
-    function addTag() {
-        $.ajax({
-            url: "/Post/AttachTag",
-            data: { name: $("#tagName").val() },
-            success: function (data) {
-                $("#tagName").val("");
-                $("#notags").hide();
-                $("#moretags").html(""); // Clear the div
-                $.each(data, function (idx, tag) {
-                    $("#moretags").append('<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">' + tag['Name'] + '</div>')
-                });
-                $("#moretags").append('<div><input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />' +
-                    '<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" /></div>');
-            }
-        });
-    }
-    function addPopTag(tagname, id) {
-        $.ajax({
-            url: "/Post/AttachTag",
-            data: { name: tagname },
-            success: function (data) {
-                $("#notags").hide();
-                $("#tag_" + id).hide();
-                $("#moretags").html(""); // Clear the div
-                $.each(data, function (idx, tag) {
-                    $("#moretags").append('<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">' + tag['Name'] + '</div>')
-                });
-                $("#moretags").append('<div><input type="text" id="tagName" value="" placeholder="Add tag..." class="form-control-sm" autocomplete="off" />' +
-                    '<input type="button" value="Add" onclick="addTag()" class="btn-sm btn-primary" /></div>');
-            }
-        });
-    }
-</script>
+@Html.ActionLink("Browse with Views", "BrowseViews")
+@Html.ActionLink("Browse with Tags", "BrowseTagTabs")
 
-@*<h2>Browse Tags</h2>*@
-
-@*<table class="table">
-  
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>          
-        </tr>
-    }
-
-</table>*@
 <div class="d-inline-flex flex-wrap offset-md-2 mt-3 w-75">
     <div class="mr-2 pt-1">Popular Tags</div>
-    @if (popTags.Count > 0)
+    @foreach (var item in Model)
     {
-        foreach (var tag in popTags)
-        {
-            <a href="@Url.Action("BrowseTags", "Browse")" id="tag_@tag.Id" onclick="addPopTag('@tag.Name', @tag.Id);" class="rounded-pill bg-primary pr-3 pl-3 pt-1 pb-1 mr-2 mb-2 text-light">@tag.Name</a>
-        }
+        <div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">
+            <a href=@Url.Action("BrowseTags", "Browse", new { id = item.Id })>
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
+        </div>
     }
 </div>
-@*<div class="">
-    @Html.Partial("BrowseTags", "Browse")
-</div>*@
