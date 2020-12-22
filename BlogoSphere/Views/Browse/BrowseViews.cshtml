@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BlogoSphere.Models.Blog>
+
+@{
+    ViewBag.Title = "BrowseViews";
+}
+
+@*<h2>Browse by Views</h2>*@
+<div>
+    @Html.ActionLink("Browse with Views", "BrowseViews")
+    @Html.ActionLink("Browse with Tags", "BrowseTagTabs")
+</div>
+
+<div class="w-100">
+    <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Views)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Views)
+                </td>
+                <td>
+                    <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.UserName)
+                </td>
+            </tr>
+        }
+    </table>
+</div>

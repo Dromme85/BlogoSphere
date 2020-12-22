@@ -57,7 +57,11 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            if (returnUrl != null)
+                ViewBag.ReturnUrl = returnUrl;
+            else
+                ViewBag.ReturnUrl = Request.UrlReferrer.ToString();
+
             return View();
         }
 

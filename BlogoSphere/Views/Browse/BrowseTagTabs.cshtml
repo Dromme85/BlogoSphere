@@ -1,0 +1,20 @@
+﻿@model IEnumerable<BlogoSphere.Models.Tag>
+@using BlogoSphere.Models
+@{
+    ViewBag.Title = "BrowseTagTabs";
+}
+
+@Html.ActionLink("Browse with Views", "BrowseViews")
+@Html.ActionLink("Browse with Tags", "BrowseTagTabs")
+
+<div class="d-inline-flex flex-wrap offset-md-2 mt-3 w-75">
+    <div class="mr-2 pt-1">Popular Tags</div>
+    @foreach (var item in Model)
+    {
+        <div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">
+            <a href=@Url.Action("BrowseTags", "Browse", new { id = item.Id })>
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
+        </div>
+    }
+</div>
