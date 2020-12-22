@@ -27,6 +27,42 @@ textarea {
     min-height: 100px;
 }
 
+.firstCont {
+    margin-bottom: 25px;
+}
+
+#BL {
+    background-color: #dc3545;
+}
+
+#VP {
+    background-color: #17a2b8;
+    color: white;
+}
+
+#CP {
+    background-color: #17a2b8;
+}
+
+#EP {
+    background-color: #28a745;
+}
+
+.customCont {
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-top: 40px;
+    background-color: lightgreen;
+}
+
+#PN {
+    background-color: #212529;
+}
+
+#container {
+    float: right;
+  
 .textBody {
     overflow: hidden;
     text-overflow: ellipsis;

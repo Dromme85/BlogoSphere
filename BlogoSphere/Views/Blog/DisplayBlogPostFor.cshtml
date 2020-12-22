@@ -5,7 +5,7 @@
 
 <h2 style="color:coral" class="pt-3 pb-3 text-center">Search Result</h2>
 
-@* Search information *@
+ Search information 
 <div class="bg-info w-100 mb-3 p-2">@Model.BlogList.Count blogs and @Model.PostList.Count posts found matching "@Model.SearchText"</div>
 
 <div class="row">
@@ -23,22 +23,25 @@
 						No matching blogs found.
 					</td>
 				</tr>
-			}
-			else
-			{
-				foreach (var item in Model.BlogList)
-				{
-					<tr>
+            }
+            else
+            {
+                foreach (var item in Model.BlogList)
+                {
+				<tr>
 						<td>
-							<a href=@Url.Action("Details", "Blog", new { id = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a>
+							<a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+							@Html.DisplayFor(modelItem => item.Title)
 						</td>
 
 						<td>@Html.DisplayFor(modelItem => item.Created)</td>
 					</tr>
-				}
-			}
+                }
+            }
+		
 		</table>
-	</div>
+		
+</div>
 	<div class="col-6 w-100">
 		<table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
 			<tr>
@@ -61,7 +64,7 @@
 				{
 					<tr>
 						<td>
-							<a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>@Html.DisplayFor(modelItem => item.Title)</a>
+							<a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>@Html.DisplayFor(modelItem => item.Title)
 						</td>
 						<td>@Html.DisplayFor(modelItem => item.Blog.Title)</td>
 						<td>@Html.DisplayFor(modelItem => item.Created)</td>
