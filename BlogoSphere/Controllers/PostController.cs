@@ -64,7 +64,7 @@ namespace BlogoSphere.Controllers
                 .Where(p => p.BlogId == blogId).ToList();
 
             if (model.Count == 0 || model == null)
-                return RedirectToAction("Index", "Home");
+                return View();
 
             return View(model);
 		}
