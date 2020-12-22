@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Post>
 
 <div>
-   @Html.ActionLink("Browse with Views", "BrowseViews")
+    @Html.ActionLink("Browse with Views", "BrowseViews")
     @Html.ActionLink("Browse with Tags", "BrowseTagTabs")
-    </div>
+</div>
 
-<div class="w-100">
+@*<div class="w-100">
     <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
         <tr>
             <th>
@@ -14,18 +14,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Body)
-            </th>*@
+            <th>
+                    @Html.DisplayNameFor(model => model.Body)
+                </th>
             <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Views)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>*@
+            <th>
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>
             <th>
                 @Html.DisplayNameFor(model => model.Blog.Author)
             </th>
@@ -46,9 +46,9 @@
                         @Html.DisplayFor(modelItem => item.Title)
                     </a>
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Body)
-                </td>*@
+                <td>
+                        @Html.DisplayFor(modelItem => item.Body)
+                    </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
@@ -61,4 +61,22 @@
             </tr>
         }
     </table>
-</div>
+</div>*@
+
+@foreach (var item in Model) { 
+    <div class="container customCont">
+        <div class="row d-inline-flex w-100">
+            <div class="firstCont col-4">
+                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">@item.Title</div>
+            </div>
+
+            <div class="col-4 text-right">
+                <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>@Html.DisplayFor(modelItem => item.Blog.Title)</a>
+            </div>
+        </div>      
+    </div>
+<div class="container col-8 text-right">
+                <div> @Html.DisplayFor(modelItem => item.Created)</div>
+    </div>
+
+}
