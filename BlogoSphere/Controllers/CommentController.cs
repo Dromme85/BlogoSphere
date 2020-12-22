@@ -81,7 +81,8 @@ namespace BlogoSphere.Controllers
             {
                 db.Entry(comment).State = EntityState.Modified;
                 comment.Created = original_data.Created;
-                db.Posts.Find((int)Session["PostId"]).Comments.Add(comment);               
+                comment.PostId = original_data.PostId;
+                //db.Posts.Find((int)Session["PostId"]).Comments.Add(comment);               
                 comment.UserId = original_data.UserId;
                 db.SaveChanges();                
             }
