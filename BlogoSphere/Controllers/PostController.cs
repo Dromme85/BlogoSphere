@@ -91,7 +91,7 @@ namespace BlogoSphere.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Title,Body,BlogId")] Post model) // Add image here later.
+        public ActionResult Create([Bind(Include = "ID,Title,Image,Body,BlogId")] Post model) // Add image here later.
 		{
             var tta = (List<Tag>)Session["TagsToAdd"];
 

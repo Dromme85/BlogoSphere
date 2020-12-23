@@ -73,7 +73,7 @@
 		<div class="d-lg-inline-flex w-100">
 			<div class="col-lg-8 p-2">
 				<div class="d-lg-inline-flex bg-danger rounded m-1 pl-1 align-content-lg-center p-1" id="BL">
-					<a href=@Url.Action("Index", "Post", new { id = item.Id } ) class="text-dark">@Html.DisplayFor(modelItem => item.Title)</a>
+					<a href=@Url.Action("Index", "Post", new { postid = item.Id } ) class="text-dark">@Html.DisplayFor(modelItem => item.Title)</a>
 				</div>
 				<div class="d-lg-inline-flex bg-danger rounded m-1 p-1 align-content-lg-center" id="BL">
 					<a href=@Url.Action("Details", "Blog", new { id = item.BlogId } ) class="text-dark">@Html.DisplayFor(modelItem => item.Blog.Title)</a>
