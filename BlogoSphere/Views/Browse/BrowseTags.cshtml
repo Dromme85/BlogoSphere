@@ -1,56 +1,83 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Post>
 
-@{ 
-	Layout = null;
+@{
+    Layout = null;
 }
 
-@if (Model != null)
-{
-<div class="w-100">
-    <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Blog.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Views)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Blog.Author)
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-		{
-            <tr>
-                <td>
-                    <a href=@Url.Action("Details", "Blog", new { id = item.Id })>
-                        @Html.DisplayFor(modelItem => item.Blog.Title)
-                    </a>
-                </td>
-                <td>
-                    <a href=@Url.Action("Index", "Post", new { Postid = item.Id })>
-
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Created)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Views)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Blog.Author.UserName)
-                </td>
-            </tr>
-		}
-    </table>
+<div>
+    @Html.ActionLink("Browse with Views", "BrowseViews")
+    @Html.ActionLink("Browse with Tags", "BrowseTagTabs")
 </div>
+
+@*<div class="w-100">
+        <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Blog.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Body)
+                    </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Created)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Views)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.Image)
+                    </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Blog.Author)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
+                            @Html.DisplayFor(modelItem => item.Blog.Title)
+                        </a>
+                    </td>
+                    <td>
+                        <a href=@Url.Action("Index", "Post", new { Postid = item.Id } )>
+
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </a>
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Body)
+                        </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Views)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Blog.Author.UserName)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>*@
+
+@foreach (var item in Model)
+{
+    <div class="container customCont">
+        <div class="d-lg-inline-flex w-100">
+            <div class="firstCont col-lg-8">
+                <div class="d-lg-inline-flex bg-danger rounded m-lg-1 pl-lg-1 align-content-lg-center" id="BL">@item.Title</div>
+                <div class="d-lg-inline-flex bg-danger rounded m-lg-1 p-lg-1 align-content-lg-center" id="BL"><a href=@Url.Action("Details", "Blog", new { id = item.Id } )>@Html.DisplayFor(modelItem => item.Blog.Title)</a></div>
+                @*<div class="d-inline-flex text-md-center">@Html.DisplayFor(modelItem => item.Created)</div>*@
+                <div class="d-inline-flex text-right"><span>@Html.DisplayFor(modelItem => item.Created)&nbsp;by&nbsp;@Html.DisplayFor(modelItem => item.Blog.Author.UserName)</span></div>
+                @*<div class="d-inline-flex text-md-right">@Html.DisplayFor(modelItem => item.Blog.Author.UserName)</div>*@
+            </div>
+        </div>
+    </div>
 }
