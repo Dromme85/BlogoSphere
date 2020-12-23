@@ -15,20 +15,26 @@
 			{
 				<div class="col-4 pt-3 text-right">
 					@Html.ActionLink("Edit this Post", "Edit", "Post", new { postid = Model.Id }, new { @class = "btn btn-warning" })
+					@Html.ActionLink("Delete this Post", "Delete", "Post", new { postid = Model.Id }, new { @class = "btn btn-danger" })
 				</div>
 			}
 		</div>
 		<div class="col-12 d-inline-flex row bg-light p-3 rounded">
 			<div class="d-inline-flex flex-wrap col-md-6">
-				@foreach (var tag in Model.Tags)
-				{
-					<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">@tag.Name</div>
-				}
+			@foreach (var tag in Model.Tags)
+			{
+				<div class="rounded-pill bg-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">@tag.Name</div>
+			}
 			</div>
 			<div class="col-md-6 text-right text-nowrap">
 				Created @Model.Created | Viewed @Session[Model.Id + "views"] times
 			</div>
-			@* TODO: Maybe add post image here? *@
+			@if (Model.Image != null)
+			{
+			<div class="col-12 text-center">
+				<img class="shadow img-thumbnail" src="@Model.Image" />
+			</div>
+			}
 			<div class="col-12 mt-3">
 				<p class="lead shadow p-2 bg-white" disabled style="white-space:pre-wrap;">@Html.DisplayFor(modelItem => Model.Body)</p>
 			</div>
