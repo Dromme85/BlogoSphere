@@ -375,6 +375,7 @@
     <Content Include="Views\Browse\BrowseViews.cshtml" />
     <Content Include="Views\Browse\BrowseTagTabs.cshtml" />
     <Content Include="Views\Browse\BrowseTags.cshtml" />
+    <Content Include="Views\Post\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

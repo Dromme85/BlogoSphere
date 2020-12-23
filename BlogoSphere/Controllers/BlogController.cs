@@ -169,11 +169,14 @@ namespace BlogoSphere.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = db.Blogs.Find(id);
+            Blog blog = db.Blogs.Include(b => b.Author).Where(b => b.Id == id).FirstOrDefault();
             if (blog == null)
             {
                 return HttpNotFound();
             }
+            if (blog.Author.Id != User.Identity.GetUserId())
+                return RedirectToAction("Details", "Blog", blog.Id);
+
             return View(blog);
         }
 
@@ -185,7 +188,7 @@ namespace BlogoSphere.Controllers
             Blog blog = db.Blogs.Find(id);
             db.Blogs.Remove(blog);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("BrowseViews", "Browse");
         }
 
         protected override void Dispose(bool disposing)
