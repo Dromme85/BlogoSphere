@@ -1,21 +1,22 @@
 ﻿@model BlogoSphere.Models.Blog
 @using BlogoSphere.Models
+@using Microsoft.AspNet.Identity
 
 @{
 	ViewBag.Title = "Details " + Model.Title;
 
 	var datePosts = (List<Post>)ViewBag.DatePosts;
 	var postsByDate =
-	from p in Model.Posts
-	group p by p.Created.Year into yg
-	select new
-	{
-		Year = yg.Key,
-		MonthGroups =
-			from o in yg
-			group o by o.Created.Month into mg
-			select new { Month = mg.Key, PostCount = mg.Count() }
-	};
+		from p in Model.Posts
+		group p by p.Created.Year into yg
+		select new
+		{
+			Year = yg.Key,
+			MonthGroups =
+				from o in yg
+				group o by o.Created.Month into mg
+				select new { Month = mg.Key, PostCount = mg.Count() }
+		};
 }
 
 
@@ -24,8 +25,15 @@
 		@*<div class="col-8">@Html.Action("List", "Post", Model.Posts)</div>*@
 		<div class="col-8">
 			<div class="d-block w-100 bg-secondary rounded-bottom p-2 mb-3">
-				@Html.ActionLink("Back to My Blogs", "Index", null, new { @class = "btn btn-danger" })
-				@Html.ActionLink("Create New Blogpost", "Create", "Post", new { blogid = Model.Id }, new { @class = "btn btn-danger" })
+				@if (Model.Posts.FirstOrDefault().Blog.Author.Id == User.Identity.GetUserId())
+				{
+					@Html.ActionLink("Back to My Blogs", "Index", null, new { @class = "btn btn-danger mr-3" })
+					@Html.ActionLink("Create New Blogpost", "Create", "Post", new { blogid = Model.Id }, new { @class = "btn btn-danger" })
+				}
+				else
+				{
+					@Html.ActionLink("Back to Blogs", "BrowseViews", "Browse", null, new { @class = "btn btn-danger" })
+				}
 			</div>
 			@if (datePosts != null)
 			{
