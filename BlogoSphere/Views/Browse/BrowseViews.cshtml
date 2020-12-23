@@ -4,49 +4,37 @@
     ViewBag.Title = "BrowseViews";
 }
 
-@*<h2>Browse by Views</h2>*@
-<div>
-    @Html.ActionLink("Browse with Views", "BrowseViews")
-    @Html.ActionLink("Browse with Tags", "BrowseTagTabs")
+<div class="container">
+<div class="row p-3">
+    <div class="btn btn-primary active">Browse Blogs by Views</div>
+    <a href="@Url.Action("BrowseTagTabs")" class="btn btn-primary ml-3">Browse Posts by Tags</a>
 </div>
 
-<div class="w-100">
-    <table border="0" style="background-color:lightgray" cellpadding="15" class="w-100">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Views)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Views)
-                </td>
-                <td>
-                    <a href=@Url.Action("Details", "Blog", new { id = item.Id } )>
-
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Created)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author.UserName)
-                </td>
-            </tr>
-        }
-    </table>
+@foreach (var item in Model)
+{
+    <div class="container customCont">
+        <div class="row d-inline-flex w-100 ">
+            <div class="firstCont col-4">
+                <div class="d-inline-flex bg-primary rounded m-1 p-1">
+                    @{
+                        int totalViews = 0;
+                        foreach (var post in item.Posts)
+                        {
+                            totalViews += post.Views;
+                        }
+                    }
+                    @totalViews Views
+                </div>
+                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">@item.Title</div>
+            </div>
+            <div class="container col-4 text-right">
+                <div>
+                    @Html.DisplayFor(modelItem => item.Created)<span> by </span>@Html.DisplayFor(modelItem => item.Author.UserName)
+                </div>
+            </div>
+        </div>
+            
+    </div>
+}
 </div>
+
