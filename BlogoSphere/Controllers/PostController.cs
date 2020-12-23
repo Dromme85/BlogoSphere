@@ -178,6 +178,8 @@ namespace BlogoSphere.Controllers
                     Post post = tempDb.Posts.Find(model.Id);
                     post.Title = model.Title;
                     post.Body = model.Body;
+                    if (model.Image != null)
+                        post.Image = model.Image;
 
                     var newTags = (List<Tag>)Session["TagsToAdd"];
                     var oldTags = post.Tags.ToList();                   
@@ -218,6 +220,32 @@ namespace BlogoSphere.Controllers
             ViewBag.PopularTags = popularTags.Take(10).ToList();
 
             return View(model);
+		}
+
+        public ActionResult Delete(int? postId)
+		{
+            if (postId == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Post post = db.Posts.Include(p => p.Blog.Author).Where(p => p.Id == postId).FirstOrDefault();
+            if (post == null)
+                return HttpNotFound();
+
+            if (post.Blog.Author.Id != User.Identity.GetUserId())
+                return RedirectToAction("Details", "Blog", post.Blog.Id);
+
+            return View(post);
+		}
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int postId)
+		{
+            Post post = db.Posts.Find(postId);
+            int id = post.BlogId;
+            db.Posts.Remove(post);
+            db.SaveChanges();
+            return RedirectToAction("Details", "Blog", id);
 		}
 
         public JsonResult AttachTag(string name)

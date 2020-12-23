@@ -24,8 +24,14 @@ namespace BlogoSphere.Controllers
         {
             ViewBag.BrowseTagId = tagId;
 
-            var PoularTags = db.Tags.ToList();
-            return View(PoularTags);           
+            var popularTags = db.Posts
+                .SelectMany(p => p.Tags)
+                .GroupBy(t => t, (k, g) => new { Tag = k, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Select(g => g.Tag)
+                .ToList();
+
+            return View(popularTags);           
         }
         
         public ActionResult BrowseTags(int? tagId)
