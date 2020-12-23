@@ -40,7 +40,7 @@
                 <div class="d-inline-flex bg-primary rounded m-1 p-1">
                     @foreach (var post in item.Posts)
                     {
-                        foreach (var tag in post.Tags)
+                        foreach (var tag in post.Tags.Take(1))
                         {
                             <div>@tag.Name, </div>
                         }
