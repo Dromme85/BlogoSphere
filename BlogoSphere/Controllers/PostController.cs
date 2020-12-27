@@ -101,12 +101,26 @@ namespace BlogoSphere.Controllers
                 model.Views = 0;
                 model.Comments = new List<Comment>();
 
-                model.Tags = tta;
-
                 db.Posts.Add(model);
                 db.SaveChanges();
 
                 int pId = db.Posts.OrderByDescending(p => p.Id).First().Id;
+                //model.Tags = tta;
+                using (var tempDb = new ApplicationDbContext())
+                {
+                    var post = tempDb.Posts.Find(pId);
+                    post.Id = pId;
+                    foreach (var tag in tta)
+                    {
+                        //if (tag.Id != 0)
+                            post.Tags.Add(tempDb.Tags.Where(t => t.Name == tag.Name).FirstOrDefault() ?? tag);
+                        //model.Tags.Add(tempDb.Tags.Where(t => t.Name == tag.Name).FirstOrDefault() ?? tag);
+                    }
+
+                    tempDb.Entry(post).State = EntityState.Modified;
+                    tempDb.SaveChanges();
+                }
+
 
                 return RedirectToAction("Index", new { postid = pId });
             }
@@ -232,7 +246,7 @@ namespace BlogoSphere.Controllers
                 return HttpNotFound();
 
             if (post.Blog.Author.Id != User.Identity.GetUserId())
-                return RedirectToAction("Details", "Blog", post.Blog.Id);
+                return RedirectToAction("Details", "Blog", new { post.Blog.Id });
 
             return View(post);
 		}
@@ -245,7 +259,7 @@ namespace BlogoSphere.Controllers
             int id = post.BlogId;
             db.Posts.Remove(post);
             db.SaveChanges();
-            return RedirectToAction("Details", "Blog", id);
+            return RedirectToAction("Details", "Blog", new { id });
 		}
 
         public JsonResult AttachTag(string name)
