@@ -37,7 +37,7 @@
 			</div>
 			@if (datePosts != null)
 			{
-				<div class="h5 mt-2">Viewing posts from @datePosts.FirstOrDefault().Created.ToString("MMMM, yyyy") | <a style = "background-color: #1d3124" href="@Url.Action("Details")">View all posts</a></div>
+				<div class="h5 mt-2">Viewing posts from @datePosts.FirstOrDefault().Created.ToString("MMMM, yyyy") | <a style="color: #e59560" href="@Url.Action("Details")">View all posts</a></div>
 				foreach (var post in datePosts)
 				{
 					@Html.Action("Details", "Post", post)
