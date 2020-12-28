@@ -78,7 +78,9 @@ namespace BlogoSphere.Controllers
         // GET: Blogs/Create
         public ActionResult Create()
         {
-            return View();
+            Blog model = new Blog();
+
+            return View(model);
         }
 
         // POST: Blogs/Create

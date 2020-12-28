@@ -24,20 +24,20 @@
 	<div class="row">
 		@*<div class="col-8">@Html.Action("List", "Post", Model.Posts)</div>*@
 		<div class="col-8">
-			<div class="d-block w-100 bg-secondary rounded-bottom p-2 mb-3">
-				@if (Model.Posts.FirstOrDefault().Blog.Author.Id == User.Identity.GetUserId())
+			<div class="d-block w-100 rounded-bottom p-2 mb-3" style="background-color: #bacec1;">
+				@if (Model.Author.Id == User.Identity.GetUserId())
 				{
-					@Html.ActionLink("Back to My Blogs", "Index", null, new { @class = "btn btn-danger mr-3" })
-					@Html.ActionLink("Create New Blogpost", "Create", "Post", new { blogid = Model.Id }, new { @class = "btn btn-danger" })
+					@Html.ActionLink("Back to My Blogs", "Index", null, new { @class = "btn text-light mr-3", @style = "background-color: #1d3124;" })
+					@Html.ActionLink("Create New Blogpost", "Create", "Post", new { blogid = Model.Id }, new { @class = "btn text-light", @style = "background-color: #1d3124;" })
 				}
 				else
 				{
-					@Html.ActionLink("Back to Blogs", "BrowseViews", "Browse", null, new { @class = "btn btn-danger" })
+					@Html.ActionLink("Back to Blogs", "BrowseViews", "Browse", null, new { @class = "btn text-light", @style = "background-color: #1d3124;" })
 				}
 			</div>
 			@if (datePosts != null)
 			{
-				<div class="h5 mt-2">Viewing posts from @datePosts.FirstOrDefault().Created.ToString("MMMM, yyyy") | <a class="text-info" href="@Url.Action("Details")">View all posts</a></div>
+				<div class="h5 mt-2">Viewing posts from @datePosts.FirstOrDefault().Created.ToString("MMMM, yyyy") | <a style = "background-color: #1d3124" href="@Url.Action("Details")">View all posts</a></div>
 				foreach (var post in datePosts)
 				{
 					@Html.Action("Details", "Post", post)
@@ -45,34 +45,51 @@
 			}
 			else
 			{
-				foreach (var post in Model.Posts)
+				if (Model.Posts.Any())
 				{
+					foreach (var post in Model.Posts)
+					{
 					@Html.Action("Details", "Post", post)
+					}
+				}
+				else
+				{
+				<div class="rounded shadow m-2 mt-5 p-2" style="background-color: #f6f4e8; color: #e59560">
+					<div class="h1 text-center">
+						Welcome to your new blog!
+					</div>
+					<div class="h3 text-center">
+						Click <a href="@Url.Action("Create", "Post", new { blogid = Model.Id })" style="color: #1d3124">Here</a> to create your first post!
+					</div>
+				</div>
 				}
 			}
 		</div>
 		<div class="col-4">
-			<dl class="mt-0 p-2 bg-secondary shadow rounded-bottom">
+			<dl class="mt-0 p-2 shadow rounded-bottom" style="background-color: #bacec1;">
 				<dd class="bg-light m-2 p-1 rounded">
-					<h2 class="text-danger text-center text-uppercase">@Html.DisplayFor(model => model.Title)</h2>
+					<h2 class="text-center text-uppercase" style="color: #e59560;">@Html.DisplayFor(model => model.Title)</h2>
 				</dd>
 				<dd class="bg-white m-2 p-2 rounded">
 					<p style="white-space:pre-wrap;">@Html.DisplayFor(model => model.Body)</p>
 				</dd>
 			</dl>
 
-			<div class="w-100 bg-secondary shadow rounded p-2">
+			@if (Model.Posts.Any())
+			{
+			<div class="w-100 shadow rounded p-2" style="background-color: #bacec1;">
 				<div class="bg-light m-2 p-1 pl-4 pb-3 rounded">
 				@foreach (var Year in postsByDate)
 				{
-					<div class="h5 mt-2"><a class="text-danger" href="@Url.Action("Details", new { year = Year.Year })">@Year.Year</a></div>
+					<div class="h5 mt-2"><a style="color: #e59560;" href="@Url.Action("Details", new { year = Year.Year })">@Year.Year</a></div>
 					foreach (var Month in Year.MonthGroups)
 					{
-						<div class="pl-3"><a class="text-danger" href="@Url.Action("Details", new { year = Year.Year, month = Month.Month })">@(new DateTime(Year.Year, Month.Month, 1).ToString("MMMM")) (@Month.PostCount)</a></div>
+						<div class="pl-3"><a style="color: #e59560;" href="@Url.Action("Details", new { year = Year.Year, month = Month.Month })">@(new DateTime(Year.Year, Month.Month, 1).ToString("MMMM")) (@Month.PostCount)</a></div>
 					}
 				}
 				</div>
 			</div>
+			}
 		</div>
 	</div>
 </div>
