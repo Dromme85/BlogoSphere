@@ -16,14 +16,7 @@
         <div class="row d-inline-flex w-100 ">
             <div class="firstCont col-4">
                 <div class="d-inline-flex bg-primary rounded m-1 p-1">
-                    @{
-                        int totalViews = 0;
-                        foreach (var post in item.Posts)
-                        {
-                            totalViews += post.Views;
-                        }
-                    }
-                    @totalViews Views
+                    @item.Views Views
                 </div>
                 <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">@item.Title</div>
             </div>

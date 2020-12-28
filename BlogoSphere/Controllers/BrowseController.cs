@@ -14,10 +14,22 @@ namespace BlogoSphere.Controllers
         // GET: Browse
         public ActionResult BrowseViews()
         {
-            var blogs = db.Blogs.Include(b => b.Author).OrderByDescending(v => v.Views).ToList();
-            if (blogs != null)
-                return View(blogs);
-            return View(blogs);
+            var blogs = db.Blogs.Include(b => b.Author).ToList();
+
+            //if (blogs != null)
+            //    return View();
+
+			foreach (var blog in blogs)
+			{
+                int totalViews = 0;
+				foreach (var post in blog.Posts)
+				{
+                    totalViews += post.Views;
+				}
+                blog.Views = totalViews;
+			}
+
+            return View(blogs.OrderByDescending(b => b.Views).ToList());
         }
 
         public ActionResult BrowseTagTabs(int? tagId)
