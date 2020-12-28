@@ -49,11 +49,11 @@ textarea {
 }
 
 .customCont {
-    width: 100%;
-    border: 2px solid black;
+    /*width: 100%;
+    border: 2px solid black;*/
     border-radius: 5px;
     margin-top: 40px;
-    background-color: lightgreen;
+    background-color: #bacec1;
 }
 
 #PN {

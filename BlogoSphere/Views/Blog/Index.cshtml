@@ -1,56 +1,62 @@
 ﻿@model IEnumerable<BlogoSphere.Models.Blog>
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
 }
 
 <br />
-<h2 style="color:coral">Blog Page</h2>
+<h1 class="text-center w-100 text-uppercase" style="color:#e59560">Your Blogs</h1>
+
+<div class="container customCont p-2 shadow" style="background-color: #bacec1">
+	<div class="text-center">
+		<a href="@Url.Action("Create", "Blog")" class="btn text-light" style="background-color: #1d3124">Create New Blog</a>
+	</div>
+</div>
 
 @foreach (var item in Model)
 {
-    <div class="container customCont">
-        <div class="row d-inline-flex w-100">
-            <div class="firstCont col-4">
-                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">@item.Title</div>
+	<div class="container customCont p-2 shadow" style="background-color: #bacec1">
+		<div class="row d-inline-flex w-100">
+			<div class="ml-3">
+				<div class="h2 text-uppercase" style="color:#e59560">@item.Title</div>
 
-            </div>
+			</div>
 
-            <div class="col-8 text-right">
-                <a href="@Url.Action("Details", "Blog", new { id = item.Id })" class="btn btn-dark" id="VP">View Posts</a>
-                <a href="@Url.Action("Create", "Post", new { blogid = item.Id })" class="btn btn-success" id="CP">Create Post</a>
-                <a href="@Url.Action("Edit", "Blog", new { id = item.Id })" class="btn btn-primary" id="EP">Edit Blog</a>
-                <a href="@Url.Action("Delete", "Blog", new { id = item.Id })" class="btn btn-danger" id="">Delete Blog</a>
-            </div>
-        </div>
-        <div class="row d-inline-flex w-100">
-            <div class="secondCont col-8">
-                <a href="#" class="btn btn-success" id="PN">@item.Posts.Count Posts</a>
-                <div class="d-inline-flex bg-primary rounded m-1 p-1">
-                @{
-                    int totalViews = 0;
-                    foreach (var post in item.Posts)
-                    {
-                        totalViews += post.Views;
-                    }
-                }
+			<div class="ml-auto text-right">
+				<a href="@Url.Action("Details", "Blog", new { id = item.Id })" class="btn text-light" style="background-color: #1d3124">View Posts</a>
+				<a href="@Url.Action("Create", "Post", new { blogid = item.Id })" class="btn text-light" style="background-color: #1d3124">Create Post</a>
+				<a href="@Url.Action("Edit", "Blog", new { id = item.Id })" class="btn text-light" style="background-color: #1d3124">Edit Blog</a>
+				<a href="@Url.Action("Delete", "Blog", new { id = item.Id })" class="btn btn-danger">Delete Blog</a>
+			</div>
+		</div>
+		<div class="row d-inline-flex w-100 text-light">
+			<div class="secondCont col-md-8 col-lg-9 d-inline-flex ml-3 mt-2 p-2 rounded" style="background-color: #f6f4e8; color: #e59560">
+				<div>@item.Posts.Count Posts |</div>
+				<div class="ml-1">
+					@{
+						int totalViews = 0;
+						foreach (var post in item.Posts)
+						{
+							totalViews += post.Views;
+						}
+					}
 
-                @totalViews Views</div>
+					@totalViews Views |
+				</div>
 
-                <div class="d-inline-flex bg-primary rounded m-1 p-1">
-                    @foreach (var post in item.Posts)
-                    {
-                        foreach (var tag in post.Tags.Take(1))
-                        {
-                            <div>@tag.Name, </div>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="container col-4 text-right">
-                <div> @Html.DisplayFor(modelItem => item.Created)</div>
-            </div>
-        </div>
-    </div>
+				<div class="d-inline-flex ml-1">
+					@foreach (var post in item.Posts)
+					{
+						foreach (var tag in post.Tags.Take(1))
+						{
+							<div>@tag.Name,&nbsp;</div>
+						}
+					}
+				</div>
+			</div>
+			<div class="p-2 ml-auto mt-2 rounded" style="background-color: #f6f4e8; color: #e59560">
+				<div> @Html.DisplayFor(modelItem => item.Created)</div>
+			</div>
+		</div>
+	</div>
 }
-
