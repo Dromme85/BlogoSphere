@@ -25,7 +25,9 @@
                     }
                     @totalViews Views
                 </div>
-                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">@item.Title</div>
+                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">                   
+                   <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="text-dark">@Html.DisplayFor(modelItem => item.Title)</a>
+                   </div>
             </div>
             <div class="container col-4 text-right">
                 <div>
