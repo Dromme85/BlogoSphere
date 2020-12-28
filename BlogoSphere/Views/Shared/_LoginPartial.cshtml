@@ -14,7 +14,13 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
-
+        @*<ul class="nan navbar-nav mr-auto">
+          
+            <li class="nav-item)">
+                <a>@Html.ActionLink("My Blogs", "Index", "Blog", null, new { @class = "nav-link" })</a>
+            </li>
+            
+        </ul>*@
         <ul class="nav navbar-nav navbar-right mr-0">
             <li class="nav-item dropdown">
                 <a href=@Url.Action("Index", "Manage") class="nav-link dropdown-toggle active" data-toggle="dropdown">
@@ -24,6 +30,11 @@
                     <div class="dropdown-item">
                         <a href=@Url.Action("Index", "Manage") class="nav-link text-dark text-right">
                             Manage Account
+                        </a>
+                    </div>
+                    <div class="dropdown-item">
+                        <a href=@Url.Action("Index", "Blog") class="nav-link text-dark text-right">
+                            My Blogs
                         </a>
                     </div>
                     <div class="dropdown-divider"></div>
