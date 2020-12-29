@@ -124,8 +124,8 @@ namespace BlogoSphere.Controllers
 
             if (SearchBox != null)
             {
-                obj.BlogList = db.Blogs.Include(b => b.Author).Where(b =>  b.Title.Contains(SearchBox)).ToList();
-                obj.PostList = db.Posts.Include(p => p.Blog).Include(p => p.Blog.Author).Where(p =>  p.Title.Contains(SearchBox)).ToList();
+                obj.BlogList = db.Blogs.Include(b => b.Author).Where(b =>  b.Title.Contains(SearchBox) || b.Body.Contains(SearchBox)).ToList();
+                obj.PostList = db.Posts.Include(p => p.Blog).Include(p => p.Blog.Author).Where(p =>  p.Title.Contains(SearchBox) || p.Body.Contains(SearchBox)).ToList();
                 obj.SearchText = SearchBox;
             }
 
