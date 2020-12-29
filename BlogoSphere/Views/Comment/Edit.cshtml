@@ -1,48 +1,48 @@
 ﻿@model BlogoSphere.Models.Comment
+@using BlogoSphere.Models
+
+<script src="~/Scripts/blogScripts.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+
 @{
     ViewBag.Title = "Edit";
+    var charsLeft = 512;
+    if (Model.Body != null)
+    {
+        charsLeft -= Model.Body.Length;
+    }
 }
 
-<h2>Edit</h2>
-
+<br />
+<div class="text-center text-uppercase h2" style="color: #e59560;">Edit Comment</div>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+<div class="container customCont pt-3 col-10">
 
-<div class="form-horizontal">
-    <h4>Comment</h4>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
     <input type="hidden" name="PreviousUrl" value="@ViewBag.PreviousURL" />
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-1 text-md-right" })
+        <div class="col-md-11">
+            @Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-11", @placeholder = "Write a comment...", @onkeyup = "countChar(this,512)", @onkeypress = "manage(this)" })
+            <div class="offset-lg-9 offset-8 text-center text-light p-1 rounded-bottom text-nowrap" style="background-color:darkgray; width:100px;"><span id="charCount">@charsLeft</span> / 512</div>
+            @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger"})
         </div>
     </div>
 
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-success" />
+    <div class="form-group row pb-3 col-12">
+        <div class="offset-md-1 pl-1">
+            <input type="submit" value="Save Changes" class="btn text-light" style="background-color: #1d3124"/>
+            <a href="@ViewBag.PreviousURL" class="btn" style="background-color: #f6f4e8">Cancel</a>
         </div>
     </div>
 </div>
 }
-
-@*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
