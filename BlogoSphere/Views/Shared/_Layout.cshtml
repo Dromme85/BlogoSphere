@@ -15,12 +15,12 @@
 </head>
 <body class="pt-0">
 	<div class="container pl-2">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top container rounded-bottom">
+        <nav class="navbar navbar-expand-lg @*navbar-dark bg-dark*@ fixed-top container rounded-bottom" style="background-color: #1d3124">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 			<a href="@Url.Action("BrowseViews", "Browse")" class="navbar-brand d-inline-flex">
-				<img src="~/Content/images/bs-logo.png" width="40" height="40" /> <div class="h2 text-danger">logoSphere!</div>
+				<img src="~/Content/images/bs-logo.png" width="40" height="40" /> <div class="h2" style="color: #e59560">logoSphere!</div>
 				@*<img src="~/Content/images/png-transparent-blogger-social-media-logo-center-for-global-environmental-education-blog-text-rectangle-orange.png" width="40" class="rounded"/>*@
 			</a>
 
@@ -44,7 +44,7 @@
 					{
 						<div class="form-inline w-100">
 							@Html.TextBox("SearchBox", "", new { id = "SearchBox", @class = "form-control w-75", @placeholder = "Aa..." })
-							<button class="btn btn-danger">Search</button>
+							<button class="btn btn-outline-warning" style="color: #e59560">Search</button>
 						</div>
 					}
 				</div>
