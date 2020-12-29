@@ -23,7 +23,7 @@
         {
             <div class="form-group" id="myform">                
                 <div class="offset-md-2 col-md-8" id="txtComment">
-                    @Html.TextAreaFor(model => model.Body, new { @class = "form-control", @placeholder = "Write a comment...", @onkeyup = "countCharCom(this)", @onkeypress = "manage(this)" })
+                    @Html.TextAreaFor(model => model.Body, new { @class = "form-control", @placeholder = "Write a comment...", @onkeyup = "countChar(this,512)", @onkeypress = "manage(this)" })
                     <div class="offset-lg-7 offset-6 text-center text-light p-1 rounded-bottom text-nowrap" style="background-color:darkgray; width:100px;"><span id="charCount">@charsLeft</span> / 512</div>
                     @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
                 </div>

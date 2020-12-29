@@ -31,23 +31,33 @@ function subTag(tagname) {
 	});
 }
 
-function countChar(val) {
-	var len = val.value.length;
-	if (len >= 1024) {
-		val.value = val.value(0, 1024);
-	}
-	else {
-		$('#charCount').text(1024 - len);
-	}
-}
+//function countChar(val) {
+//	var len = val.value.length;
+//	if (len >= 1024) {
+//		val.value = val.value(0, 1024);
+//	}
+//	else {
+//		$('#charCount').text(1024 - len);
+//	}
+//}
 
-function countCharCom(val) {
+//function countCharCom(val) {
+//	var len = val.value.length;
+//	if (len >= 512) {
+//		val.value = val.value(0, 512);
+//	}
+//	else {
+//		$('#charCount').text(512 - len);
+//	}
+//}
+
+function countChar(val, maxlen = 1024) {
 	var len = val.value.length;
-	if (len >= 512) {
-		val.value = val.value(0, 512);
+	if (len >= maxlen) {
+		val.value = val.value(0, maxlen);
 	}
 	else {
-		$('#charCount').text(512 - len);
+		$('#charCount').text(maxlen - len);
 	}
 }
 
