@@ -7,8 +7,8 @@
 
 <div class="container">
 	<div class="row p-3">
-		<a href="@Url.Action("BrowseViews")" class="btn btn-primary mr-3">Browse Blogs by Views</a>
-		<div class="btn btn-primary active">Browse Posts by Tags</div>
+		<a href="@Url.Action("BrowseViews")" class="btn text-light mr-3" style="background-color:#1d3124">Browse Blogs by Views</a>
+		<div class="btn text-light mr-3" style="background-color:#1d3124">Browse Posts by Tags</div>
 	</div>
 
 	<div class="d-inline-flex flex-wrap mt-3">
@@ -23,8 +23,7 @@
 	</div>
 	@if (tagId != null)
 	{
-	<div>
-		@Html.Action("BrowseTags", tagId)
-	</div>
+<div>
+    @Html.Action("BrowseTags", tagId) </div>
 	}
 </div>

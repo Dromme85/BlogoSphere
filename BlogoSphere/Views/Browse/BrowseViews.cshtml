@@ -6,22 +6,20 @@
 
 <div class="container">
 <div class="row p-3">
-    <div class="btn btn-primary active">Browse Blogs by Views</div>
-    <a href="@Url.Action("BrowseTagTabs")" class="btn btn-primary ml-3">Browse Posts by Tags</a>
+    <div class="btn text-light"style="background-color: #1d3124">Browse Blogs by Views</div>
+    <a href="@Url.Action("BrowseTagTabs")" class="btn text-light ml-3" style="background-color: #1d3124">Browse Posts by Tags</a>
 </div>
 
 @foreach (var item in Model)
 {
-    <div class="container customCont">
+    <div class="container customCont ">
         <div class="row d-inline-flex w-100 ">
             <div class="firstCont col-4">
-                <div class="d-inline-flex bg-primary rounded m-1 p-1">
+                <div class="d-inline-flex btn text-light rounded m-1 " style="background-color:#1d3124">
                     @item.Views Views
                 </div>
-                <div class="d-inline-flex bg-danger rounded m-1 p-1" id="BL">                   
-                   <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="text-dark">@Html.DisplayFor(modelItem => item.Title)</a>
-                   </div>
-            </div>
+                   <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="btn text-light rounded m-1" style="background-color:#1d3124">@Html.DisplayFor(modelItem => item.Title)</a>
+                </div>
             <div class="container col-4 text-right">
                 <div>
                     @Html.DisplayFor(modelItem => item.Created)<span> by </span>@Html.DisplayFor(modelItem => item.Author.UserName)
