@@ -31,15 +31,16 @@ function subTag(tagname) {
 	});
 }
 
-function countChar(val) {
+function countChar(val, maxlen = 1024) {
 	var len = val.value.length;
-	if (len >= 1024) {
-		val.value = val.value(0, 1024);
+	if (len >= maxlen) {
+		val.value = val.value(0, maxlen);
 	}
 	else {
-		$('#charCount').text(1024 - len);
+		$('#charCount').text(maxlen - len);
 	}
 }
+
 function manage(txt) {
 	var bt = document.getElementById('btSubmit');
 	if (txt.value != '') {
