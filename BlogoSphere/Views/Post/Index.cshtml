@@ -33,7 +33,7 @@
 			}
 			</div>
 			<div class="col-md-6 text-right text-nowrap">
-				<div>Created @Model.Created | Viewed @Session[Model.Id + "views"] times</div>
+				<div>Created @Html.DisplayFor(modelItem => Model.Created) | Viewed @Session[Model.Id + "views"] times</div>
 				@if (User.Identity.GetUserId() != Model.Blog.Author.Id || !User.Identity.IsAuthenticated)
 				{
 					<div>Author @Model.Blog.Author.UserName</div>
