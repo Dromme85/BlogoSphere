@@ -8,12 +8,19 @@
 <div class="container">
 	@foreach (var item in Model)
     {
-        var nrDays = DateTime.Now.Subtract(item.Created).TotalDays.ToString("N2");
-	<div class="row mb-2 shadow bg-light text-light">
+        var nrDays = DateTime.Now.Subtract(item.Created).Days.ToString();
+        if (nrDays == "0"){
+            nrDays = "Today";
+        }
+        else
+        {
+            nrDays = nrDays + " days ago";
+        }
+
+    <div class="row mb-2 shadow bg-light text-light">
 		<div class="col-9 pr-0 pl-0">
-            <div class="p-1 bg-secondary">
-                @*@Html.DisplayFor(modelItem => DateTime.Now.Subtract(item.Created).Days) days ago*@
-                @Html.DisplayFor(modelItem => nrDays) days ago
+            <div class="p-1 bg-secondary">              
+                @Html.DisplayFor(modelItem => nrDays)
             </div>
 			<div class="text-dark p-2">
 				@Html.DisplayFor(modelItem => item.Body)

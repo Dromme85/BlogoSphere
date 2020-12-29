@@ -50,3 +50,8 @@ function manage(txt) {
 		bt.disabled = true;
 	}
 }
+
+function btClear() {
+	document.getElementById('btSubmit').disabled = true;
+	$('#charCount').text(512);
+}
