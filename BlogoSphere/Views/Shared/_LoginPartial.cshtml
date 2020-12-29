@@ -23,25 +23,25 @@
         </ul>*@
         <ul class="nav navbar-nav navbar-right mr-0">
             <li class="nav-item dropdown">
-                <a href=@Url.Action("Index", "Manage") class="nav-link dropdown-toggle active" data-toggle="dropdown">
-                    <img src="@userImage" width="40" height="40" class="rounded-circle"> Hello @User.Identity.GetUserName()!
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <div class="dropdown-item">
-                        <a href=@Url.Action("Index", "Manage") class="nav-link text-dark text-right">
-                            Manage Account
-                        </a>
-                    </div>
-                    <div class="dropdown-item">
-                        <a href=@Url.Action("Index", "Blog") class="nav-link text-dark text-right">
-                            My Blogs
-                        </a>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item">
-                        <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link text-dark text-right">Log off</a>
-                    </div>
-                </div>
+				<a href=@Url.Action("Index", "Manage") class="nav-link active d-inline-flex" data-toggle="dropdown">
+					<div class="h4 pr-2 mt-auto">@User.Identity.GetUserName()</div> <img src="@userImage" width="40" height="40" style="align-items: center;" class="rounded-circle"> <div class="dropdown-toggle p-2"></div>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-item">
+						<a href=@Url.Action("Index", "Blog") class="nav-link text-dark text-right">
+							My Blogs
+						</a>
+					</div>
+					<div class="dropdown-item">
+						<a href=@Url.Action("Index", "Manage") class="nav-link text-dark text-right">
+							Manage Account
+						</a>
+					</div>
+					<div class="dropdown-divider"></div>
+					<div class="dropdown-item">
+						<a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link text-dark text-right">Log off</a>
+					</div>
+				</div>
             </li>
         </ul>
     }

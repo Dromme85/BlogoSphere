@@ -30,7 +30,7 @@
         <div class="form-group row">
             @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-1 text-md-right" })
             <div class="col-md-11">
-			    @Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-11", @placeholder = "Write your post here ...", @onkeyup = "countChar(this)" })
+			    @Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-11", @placeholder = "Write your blog description here ...", @onkeyup = "countChar(this)" })
 			    <div class="offset-lg-9 offset-8 text-center text-light p-1 rounded-bottom text-nowrap" style="background-color:darkgray; width:100px;"><span id="charCount">@charsLeft</span> / 1024</div>
 			    @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
 		    </div>
