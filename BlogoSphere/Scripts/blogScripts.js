@@ -40,6 +40,17 @@ function countChar(val) {
 		$('#charCount').text(1024 - len);
 	}
 }
+
+function countCharCom(val) {
+	var len = val.value.length;
+	if (len >= 512) {
+		val.value = val.value(0, 512);
+	}
+	else {
+		$('#charCount').text(512 - len);
+	}
+}
+
 function manage(txt) {
 	var bt = document.getElementById('btSubmit');
 	if (txt.value != '') {
