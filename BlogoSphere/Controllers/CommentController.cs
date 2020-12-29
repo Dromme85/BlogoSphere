@@ -25,7 +25,7 @@ namespace BlogoSphere.Controllers
             
             var Comments = db.Comments.Include(c => c.Post).Include(c => c.User).ToList();
             Comments = db.Posts.Find(postId).Comments.OrderByDescending(c => c.Created).ToList();
-            return View(Comments.Take(5));
+            return View(Comments);
         }
 
         [AllowAnonymous]
