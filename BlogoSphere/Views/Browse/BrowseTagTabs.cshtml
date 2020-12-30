@@ -11,11 +11,11 @@
 		<div class="btn text-light mr-3" style="background-color:#1d3124">Browse Posts by Tags</div>
 	</div>
 
-	<div class="d-inline-flex flex-wrap mt-3">
+	<div class="d-inline-flex flex-wrap mt-3 shadow p-2" style="background-color: #f6f4e8">
 		@foreach (var item in Model)
 		{
-			<div class="rounded-pill btn-success pr-3 pl-3 pt-1 pb-1 mr-2 mb-2">
-				<a class="text-light" href=@Url.Action("BrowseTagTabs", new { tagid = item.Id })>
+			<div class="rounded-pill pr-3 pl-3 pt-1 pb-1 mr-2 mb-2" style="background-color: #e59560">
+				<a class="text-dark" href=@Url.Action("BrowseTagTabs", new { tagid = item.Id })>
 					@Html.DisplayFor(modelItem => item.Name)
 				</a>
 			</div>
