@@ -43,7 +43,7 @@ namespace BlogoSphere.Controllers
                 .Select(g => g.Tag)
                 .ToList();
 
-            return View(popularTags);           
+            return View(popularTags.Take(20).ToList());           
         }
         
         public ActionResult BrowseTags(int? tagId)

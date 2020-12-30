@@ -18,30 +18,30 @@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group row  pt-3 mt-3">
                             @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label text-right " })
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group row">
                             @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label text-right" })
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-offset-2 col-md-10">
-                                <div class="checkbox">
+                            <div class="offset-md-2 col-md-10">
+                                <div class="form-check">
                                     @Html.CheckBoxFor(m => m.RememberMe)
                                     @Html.LabelFor(m => m.RememberMe)
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="offset-md-3 p-2 col-md-10">
+                            <div class="offset-md-3 col-md-10 p-2 mb-3">
                                 <input type="submit" value="Log in" class="btn text-light" style="background-color: #1d3124" />
-                                <button  class=" btn" style="background-color: #e59560">@Html.ActionLink("Register as a new user", "Register")</button>
+                                <a href="@Url.Action("Register")" class="btn text-light" style="background-color: #e59560">Register a New User</a>
                             </div>
                         </div>
                            

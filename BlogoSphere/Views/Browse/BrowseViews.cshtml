@@ -5,28 +5,29 @@
 }
 
 <div class="container">
-<div class="row p-3">
-    <div class="btn text-light"style="background-color: #1d3124">Browse Blogs by Views</div>
-    <a href="@Url.Action("BrowseTagTabs")" class="btn text-light ml-2 " style="background-color: #1d3124">Browse Posts by Tags</a>
-</div>
+    <div class="row p-3">
+        <div class="btn text-light"style="background-color: #1d3124">Browse Blogs by Views</div>
+        <a href="@Url.Action("BrowseTagTabs")" class="btn text-light ml-2 " style="background-color: #1d3124">Browse Posts by Tags</a>
+    </div>
 
-@foreach (var item in Model)
-{
-    <div class="container customCont">
-        <div class="row d-inline-flex w-100 ">
-            <div class="firstCont col-8">
-                <div class="d-inline-flex btn text-light rounded mt-3" style="background-color:#1d3124">
-                    @item.Views Views
-                </div>
-                <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="btn text-light rounded mt-3" style="background-color:#1d3124">@Html.DisplayFor(modelItem => item.Title)</a>
+    @foreach (var item in Model)
+    {
+    <div class="container customCont shadow">
+        <div class="row d-inline-flex w-100">
+            <div class="firstCont col-8 mb-0">
+                <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="btn btn-lg text-light mt-3" style="background-color:#1d3124">@Html.DisplayFor(modelItem => item.Title)</a>
             </div>
             @*<div class="container col-4 mt-4 pt-1 text-right">*@
-            <div class="col-lg-4 p-2 pt-3 text-right">
-                @Html.DisplayFor(modelItem => item.Created)<span> by </span>@Html.DisplayFor(modelItem => item.Author.UserName)
-            </div>
+		    <div class="ml-auto mt-2 mb-2 p-2 text-right rounded" style="background-color: #f6f4e8; color: #e59560">
+			    <div>
+				    @Html.DisplayFor(modelItem => item.Created)<span> by </span>@Html.DisplayFor(modelItem => item.Author.UserName)
+			    </div>
+			    <div>
+				    @item.Views Views
+			    </div>
+		    </div>
         </div>
-            
     </div>
-}
+    }
 </div>
 
