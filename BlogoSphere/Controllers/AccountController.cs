@@ -57,7 +57,11 @@ namespace BlogoSphere.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            if (returnUrl != null)
+                ViewBag.ReturnUrl = returnUrl;
+            else
+                ViewBag.ReturnUrl = Request.UrlReferrer.ToString();
+
             return View();
         }
 
@@ -79,7 +83,7 @@ namespace BlogoSphere.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return Redirect(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -151,7 +155,7 @@ namespace BlogoSphere.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, FirstName = "n/a", LastName = "n/a" };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -392,7 +396,7 @@ namespace BlogoSphere.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("BrowseViews", "Browse");
         }
 
         //

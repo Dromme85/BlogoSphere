@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BlogoSphere.Models.Comment>
+@using Microsoft.AspNet.Identity
+
+@{
+	Layout = null;	
+}
+
+<div class="container">
+	@foreach (var item in Model)
+    {
+        var nrDays = DateTime.Now.Subtract(item.Created).Days.ToString();
+        if (nrDays == "0"){
+            nrDays = "Today";
+        }
+        else
+        {
+            nrDays = nrDays + " days ago";
+        }
+
+	<div class="row mb-3 shadow rounded" style="background-color: #f6f4e8; color: #e59560;">
+		<div class="col-9 pr-0 pl-0">
+            <div class="p-1 rounded-left" style="background-color: #1d3124">
+                @Html.DisplayFor(modelItem => nrDays)
+            </div>
+			<div class="text-dark p-2">
+				@Html.DisplayFor(modelItem => item.Body)
+			</div>
+		</div>
+		<div class="col-3 text-right rounded-right d-inline-flex p-2" style="background-color: #1d3124">
+			<div class="pr-2 col-8">
+				<div class="">
+					@Html.DisplayFor(modelItem => item.User.UserName)
+				</div>
+				<div class="">
+					@if (User.IsInRole("Admin") || item.UserId == User.Identity.GetUserId())
+					{
+						<a href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-edit" style="color:#e59560"></i></a>
+						<a href="@Url.Action("Delete", new { id = item.Id })"><i class="fas fa-trash-alt" style="color:#e59560"></i></a>
+					}
+				</div>
+			</div>
+			<div class="float-right col-4 p-2">
+			@if (item.User.Image == null || item.User.Image == "")
+			{
+				<img src="~/Content/images/icon.png" width="40" height="40" class="rounded-circle">
+			}
+			else
+			{
+				<img src="@item.User.Image" width="40" height="40" class="rounded-circle">
+			}
+			</div>
+		</div>
+		<br />
+	</div>
+	}
+</div>

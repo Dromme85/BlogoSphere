@@ -1,0 +1,52 @@
+﻿@model BlogoSphere.Models.Blog
+
+@{
+	ViewBag.Title = "Edit Blog";
+	var charsLeft = 1024;
+	if (Model.Body != null)
+	{
+		charsLeft -= Model.Body.Length;
+	}
+}
+<br />
+<div class="text-center text-uppercase h2" style="color: #e59560;">Edit Blog</div>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+<div class="container customCont pt-3 col-10">
+
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	@Html.HiddenFor(model => model.Id)
+
+	<div class="form-group row">
+		@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-1 text-md-right" })
+		<div class="col-md-11">
+			@Html.TextBoxFor(model => model.Title, new { @class = "form-control col-md-8", @placeholder = "Title here ..." })
+			@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group row">
+		@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-1 text-md-right" })
+		<div class="col-md-11">
+			@Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-11", @placeholder = "Write your post here ...", @onkeyup = "countChar(this)" })
+			<div class="offset-lg-9 offset-8 text-center text-light p-1 rounded-bottom text-nowrap" style="background-color:darkgray; width:100px;"><span id="charCount">@charsLeft</span> / 1024</div>
+			@Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group row pb-3 col-12">
+		<div class="offset-md-1 pl-1">
+			<input type="submit" value="Save Changes" class="btn text-light" style="background-color: #1d3124" />
+			<a href="@Url.Action("Index")" class="btn" style="background-color: #f6f4e8">Cancel</a>
+		</div>
+	</div>
+</div>
+}
+
+
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

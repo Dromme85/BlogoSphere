@@ -1,0 +1,76 @@
+@model BlogoSphere.Models.SearchVM
+@{
+	ViewBag.Title = "DisplayBlogFor";
+}
+<h2 class="text-uppercase h2 pt-2 pb-3 text-center" style="color: #e59560;">Search Result</h2>
+    @*<h2 style="color:coral" class="pt-3 pb-3 text-center">Search Result</h2>*@
+<h2 class="h2 pb-0 pt-0"  style="color: #e59560;" >Search information</h2>
+    <div class=" w-100 mb-2 p-2 customCont">@Model.BlogList.Count blogs and @Model.PostList.Count posts found matching "@Model.SearchText"</div>
+
+    <div class="row mb-4">
+        <div class="col-6">
+            <table border="0" style="background-color: #f6f4e8;" cellpadding="10" class="w-100">
+                <tr>
+                    <th style="color: #e59560;">Title</th>
+                    <th style="color: #e59560;">Created</th>
+                </tr>
+
+                @if (Model.BlogList.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="3" class="text-danger">
+                            No matching blogs found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.BlogList)
+                    {
+                        <tr>
+                            <td>
+                                <a href=@Url.Action("Details", "Blog", new { id = item.Id } ) class="btn-outline-info" >
+                                    @Html.DisplayFor(modelItem => item.Title)</a>
+                            </td>
+
+                            <td>@Html.DisplayFor(modelItem => item.Created)</td>
+                        </tr>
+                    }
+                }
+
+            </table>
+
+        </div>
+        <div class="col-6">
+            <table border="0" style="background-color: #f6f4e8;" cellpadding="10" class="w-100">
+                <tr>
+                    <th style="color: #e59560;">Title</th>
+                    <th style="color: #e59560;">Blog Name</th>
+                    <th style="color: #e59560;">Created</th>
+                </tr>
+
+                @if (Model.PostList.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="3" class="text-danger">
+                            No matching posts found.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.PostList)
+                    {
+                        <tr>
+                            <td>
+                                <a href=@Url.Action("Index", "Post", new { Postid = item.Id } ) class="btn-outline-info">@Html.DisplayFor(modelItem => item.Title)</a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Blog.Title)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Created)</td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>

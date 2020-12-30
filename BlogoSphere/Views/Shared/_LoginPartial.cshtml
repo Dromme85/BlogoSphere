@@ -1,16 +1,37 @@
 ﻿@using Microsoft.AspNet.Identity
+@using BlogoSphere.Models
+@{
+    var db = new ApplicationDbContext();
+    var userImage = "";
+    if (User.Identity.IsAuthenticated)
+    {
+        userImage = db.Users.Find(User.Identity.GetUserId()).Image;
+    }
+    if (userImage == "" || userImage == null) { userImage = "/Content/images/icon.png"; }
+}
 @if (Request.IsAuthenticated)
 {
-	using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-	{
-		@Html.AntiForgeryToken()
-
-		<ul class="nav navbar-nav navbar-right mr-0">
-			<li class="nav-item dropdown">
-				<a href=@Url.Action("Index", "Manage") class="nav-link dropdown-toggle active" data-toggle="dropdown">
-					Hello @User.Identity.GetUserName()!
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        @*<ul class="nan navbar-nav mr-auto">
+          
+            <li class="nav-item)">
+                <a>@Html.ActionLink("My Blogs", "Index", "Blog", null, new { @class = "nav-link" })</a>
+            </li>
+            
+        </ul>*@
+        <ul class="nav navbar-nav navbar-right mr-0">
+            <li class="nav-item dropdown">
+				<a href=@Url.Action("Index", "Manage") class="nav-link active d-inline-flex" style="color: #e59560" data-toggle="dropdown">
+					<div class="h4 pr-2 mt-auto">@User.Identity.GetUserName()</div> <img src="@userImage" width="40" height="40" style="align-items: center;" class="rounded-circle"> <div class="dropdown-toggle p-2"></div>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-item">
+						<a href=@Url.Action("Index", "Blog") class="nav-link text-dark text-right">
+							My Blogs
+						</a>
+					</div>
 					<div class="dropdown-item">
 						<a href=@Url.Action("Index", "Manage") class="nav-link text-dark text-right">
 							Manage Account
@@ -21,14 +42,17 @@
 						<a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link text-dark text-right">Log off</a>
 					</div>
 				</div>
-			</li>
-		</ul>
-	}
+            </li>
+        </ul>
+    }
 }
 else
 {
-	<ul class="nav navbar-nav navbar-right mr-0">
-		<li class="nav-item"><a href="/Account/Register" id="registerLink" class="nav-link">Register</a></li>
-		<li class="nav-item"><a href="/Account/Login" id="loginLink" class="nav-link">Log in</a></li>
-	</ul>
+    <ul class="nav navbar-nav navbar-right mr-0">
+        <li class="nav-item"><a href="/Account/Register" id="registerLink" class="nav-link" style="color: #e59560">Register</a></li>
+        <li class="nav-item"><a href="/Account/Login" id="loginLink" class="nav-link" style="color: #e59560">Log in</a></li>
+    </ul>
 }
+@*<li class="nav-item">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+    <li class="nav-item">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>*@
+

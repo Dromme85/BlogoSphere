@@ -1,0 +1,20 @@
+﻿@model IEnumerable<BlogoSphere.Models.Post>
+
+@{
+	Layout = null;
+}
+
+@foreach (var item in Model)
+{
+	<div class="container customCont">
+		<div class="d-inline-flex w-100">
+			<div class="firstCont mb-3">
+				<a href=@Url.Action("Index", "Post", new { postid = item.Id } ) title="Post" class="btn btn-lg text-light mt-3" style="background-color:#1d3124">@Html.DisplayFor(modelItem => item.Title)</a>
+				<a href=@Url.Action("Details", "Blog", new { id = item.BlogId } ) title="Blog" class="btn btn-lg text-light mt-3" style="background-color:#1d3124">@Html.DisplayFor(modelItem => item.Blog.Title)</a>
+			</div>
+			<div class="ml-auto mt-2 mb-2 p-2 pt-3 text-right rounded" style="background-color: #f6f4e8; color: #e59560">
+				Created @Html.DisplayFor(modelItem => item.Created) by @Html.DisplayFor(modelItem => item.Blog.Author.UserName)
+			</div>
+		</div>
+	</div>
+}
