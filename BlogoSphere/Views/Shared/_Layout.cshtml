@@ -30,16 +30,16 @@
                 <ul class="nan navbar-nav mr-auto">
                     @* Marks current controller as active *@
                     <li class="nav-item @(cont == "Home" ? "active" : "")">
-                         <a>@Html.ActionLink("Browse", "BrowseViews", "Browse", null, new { @class = "nav-link" })</a>
+                         <a>@Html.ActionLink("Browse", "BrowseViews", "Browse", null, new { @class = "nav-link", @style = "color: #e59560" })</a>
                         </li>
                     @if (User.IsInRole("Admin") || User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item @(cont == "Blog" ? "active" : "")">
-                            <a>@Html.ActionLink("My Blogs", "Index", "Blog", null, new { @class = "nav-link" })</a>
+                            <a>@Html.ActionLink("My Blogs", "Index", "Blog", null, new { @class = "nav-link", @style = "color: #e59560" })</a>
                         </li>
-                        <li class="nav-item @(cont == "Post" ? "active" : "")">
+                        @*<li class="nav-item @(cont == "Post" ? "active" : "")">
                             <a>@Html.ActionLink("Create Blog", "Create", "Blog", null, new { @class = "nav-link" })</a>
-                        </li>
+                        </li>*@
                     }
                     </ul>
 
@@ -48,7 +48,7 @@
 					{
 						<div class="form-inline w-100">
 							@Html.TextBox("SearchBox", "", new { id = "SearchBox", @class = "form-control w-75", @placeholder = "Aa..." })
-							<button class="btn btn-outline-warning" style="color: #e59560">Search</button>
+							<button class="btn text-light" style="background-color: #e59560;">Search</button>
 						</div>
 					}
 				</div>
