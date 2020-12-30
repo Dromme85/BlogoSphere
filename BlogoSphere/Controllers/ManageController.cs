@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BlogoSphere.Models;
+using System.Data.Entity;
 
 namespace BlogoSphere.Controllers
 {
@@ -52,28 +53,52 @@ namespace BlogoSphere.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public ActionResult Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
-            {
-                HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
+            var model = new ApplicationUser();
+            using (var tempDb = new ApplicationDbContext())
+			{
+                var u = tempDb.Users.Find(userId);
+                model = u;
+			}
+            ViewBag.HasPassword = HasPassword();
+
+
             return View(model);
         }
+
+        [HttpPost, ActionName("Index")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,UserName,FirstName,LastName,Email,Image")] ApplicationUser model)
+		{
+            if (ModelState.IsValid)
+			{
+                using (var tempDb = new ApplicationDbContext())
+				{
+                    ApplicationUser user = tempDb.Users.Find(model.Id);
+
+                    user.UserName = model.UserName;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.Image = model.Image;
+
+                    tempDb.Entry(user).State = EntityState.Modified;
+                    tempDb.SaveChanges();
+				}
+
+                return RedirectToAction("BrowseViews", "Browse");
+			}
+
+            return View("Index", model);
+		}
 
         //
         // POST: /Manage/RemoveLogin
